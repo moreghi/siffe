@@ -1,6 +1,5 @@
 
   <td>{{i}}</td>
-  <td>{{manif.id}}</td>
   <td>{{manif.descManif}}</td>
   <td>{{manif.dtInizio | date: 'dd-MM-yyyy'}}</td>
   <td>{{manif.dtFine | date: 'dd-MM-yyyy'}}</td>
@@ -62,7 +61,12 @@
   <fa-icon [icon]="faList"  fixed="true"></fa-icon>
 </button>
 </td>
-
+<td *ngIf="(functionUser === navigateEdit || functionUser === navigateEdits) && manif.stato > 0">
+  <button class="btn btn-sm btn-info" (click)="navigate(navigateGraficoDays,manif)">Grafico
+ <!--  <button class="btn btn-sm btn-info" (click)="naviga('GraphDays',manif)">Grafico  -->
+  <fa-icon [icon]="faChartPie"  fixed="true"></fa-icon>
+</button>
+</td>
 
 
 <ng-template #content let-modal>

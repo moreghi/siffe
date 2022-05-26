@@ -2,12 +2,17 @@
 <div class="mt-4 col-10 offset-2">
 
   <div class="card col-sm-10">    <!-- card -->
-    <div class="center-block centrata">
-      <img src="assets/images/logoSanfra.png"   alt="logo" class="img-circle" width="60px" height="60px">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="center-block centrata">
+          <img src="assets/images/logoSanfra.png"   alt="logo" class="img-circle" width="60px" height="60px">
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="card-header centrata textbold">Conferma Prenotazione Pranzo</div>
+      </div>
     </div>
-
-    <div class="card-header centrata textbold">Conferma Prenotazione Pranzo</div>
-    <div class="card-body">
+    <div class="card-body" *ngIf="confermataPrenotazione === false">
       <form name="confPrenPranzoForm"  #confPrenPranzoForm=ngForm (ngSubmit)="onSubmit(confPrenPranzoForm)">
         <input hidden type="text" name="token" class="form-control" id="inputtoken3" placeholder="token" [(ngModel)]="form.token" #token="ngModel" ngModel>
         <div class="form-group row">
@@ -141,6 +146,20 @@
 
       </form>
     </div>
+    <div class="card-body" *ngIf="confermataPrenotazione === true">
+        <p></p>
+        <p> grazie <strong>{{form.cognome}} &nbsp; {{form.name}} &nbsp;</strong> di aver confermato la tua presenza per la serata del &nbsp;<strong>{{form.datapren}}</strong></p>
+        <p>Abbiamo inviato al tuo indirizzo mail <strong>{{form.email}}</strong> un promemoria per la tua gradita presenza al sanfra</p>
+        <p>siamo onorati della tua presenza e cercheremo di farti trascorrere quanche ora in allegria</p>
+        <p></p>
+        <p>se hai provveduto a registrarti, effettuando il  login avrai modo di verificare le tue prenotazioni</p>
+        <p>ti aspettiamo</p>
+        <p></p>
+        <p *ngIf="emailsend === true">Sanfra</p>
+    </div>
+
+
+
   </div>
 </div>
 

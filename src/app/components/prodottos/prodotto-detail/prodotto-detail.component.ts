@@ -175,6 +175,9 @@ public selectedCompetenza = 0;
 public selectedCategoria = 0;
 public selectedTipologia = 0;
 
+
+public pathimage = '';
+
 constructor(public modalService: NgbModal,
             private prodottoService: ProdottoService,
             private tstatoprodottoService: TstatoprodottoService,
@@ -409,9 +412,14 @@ constructor(public modalService: NgbModal,
           console.log(`loadProdotto - appena entrato`);
           let rc = await this.prodottoService.getProdotto(id).subscribe(
                resp => {
-                     console.log(`loadProdotto: ${resp['data']}`);
+                     console.log('loadProdotto: ' +    JSON.stringify(resp['data']));
                      this.prodotto = resp['data'];
                      this.prodotto.key_utenti_operation = +localStorage.getItem('id');
+                      // per upload foto con path da envirnment
+                     this.pathimage = environment.APIURL + '/upload/files/products/' + this.prodotto.photo;
+
+                     console.log('pathimage per foto: ' + this.pathimage);
+
 
                      console.log('fatto lettura prodotto: ' + this.prodotto.id);
                      this.type = 'success';

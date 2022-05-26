@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { Manifestazione } from '../classes/Manifestazione';    // ../../../classes/user
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
+import { map } from 'rxjs/operators';
+import 'rxjs/add/operator/map';    // per gestire i grafici
 
 @Injectable({
   providedIn: 'root'
@@ -136,8 +138,8 @@ private APIURLSEARCH = '';
           return this.http.get(this.APIURLSEARCH,  {
             headers: this.getAuthHeader()
           });      // ok;
-
-
       }
+
+
 
 }

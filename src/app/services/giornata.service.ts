@@ -14,6 +14,7 @@ export class GiornataService {
 
   private rotta = "/giornates";
   private rottafunction = '';
+  private url = '';
 
   private rottadayActive = '/giornataact';
   private rottaManif = '/giornataManif';
@@ -189,5 +190,41 @@ export class GiornataService {
                       });      // ok;
 
                  }
+
+
+     // per fare grafici
+     getforChart(id: number) {
+
+      this.rottafunction = 'getforChart/graph';
+
+      return this.http.get(this.APIURL + '/' + this.rottafunction  + '/' + id).map(result => result);      // ok      // ok      // ok
+
+   }
+
+   getGiornateprenotabili() {
+    const stato = 3;   // cerco giornate con stato < 3
+    this.rottafunction = 'getGiornateByStato/' + stato;
+    return this.http.get(this.APIURL + '/' + this.rottafunction ,  {
+            headers: this.getAuthHeader()
+          });      // ok;
+
+     }
+              /*
+              bisogna fare  prima
+                  npm install --save rxjs-compat
+
+              e poi inserire in import
+
+                import { map } from 'rxjs/operators';
+                import 'rxjs/add/operator/map';    // per gestire i grafici
+
+                https://www.youtube.com/watch?v=RTzi5DS7On4      per esempio
+
+              */
+
+
+
+
+
 
 }

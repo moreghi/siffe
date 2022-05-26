@@ -4,9 +4,10 @@ import { Manifestazione} from '../../../classes/Manifestazione';
 import { Router } from '@angular/router';
 // per gestire il popup con esito operazione
 import { NotifierService } from 'angular-notifier';
-import { faPlusSquare, faSearch, faSave, faUserEdit, faMinus, faPlus, faWindowClose, faTrash, faInfo, faInfoCircle, faList } from '@fortawesome/free-solid-svg-icons';
+import { faPlusSquare, faSearch, faSave, faUserEdit, faMinus, faPlus, faWindowClose, faTrash, faInfo, faInfoCircle, faList, faChartPie } from '@fortawesome/free-solid-svg-icons';
 // popup per avviso cancellazione
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'tr[app-manifestazione]',
@@ -31,6 +32,7 @@ export class ManifestazioneComponent implements OnInit {
    faMinus = faMinus;
    faPlus = faPlus;
    faWindowClose = faWindowClose;
+   faChartPie = faChartPie;
 
  // -----
    public textMessage1 = '';
@@ -66,6 +68,7 @@ export class ManifestazioneComponent implements OnInit {
    public navigateEdits = 'Edits';
    public navigateNew = 'New';
    public navigateDays = 'Days';
+   public navigateGraficoDays = 'GraphDays';
 
    public messagenull = 'Nessun record presente !!!';
 
@@ -79,6 +82,7 @@ export class ManifestazioneComponent implements OnInit {
    constructor(private manifService: ManifestazioneService,
                private modalService: NgbModal,
                private route: Router,
+               private datePipe: DatePipe,
                private notifier: NotifierService) {
                 this.notifier = notifier;
               }
@@ -113,6 +117,7 @@ export class ManifestazioneComponent implements OnInit {
 
     console.log(`navigate ---- funzione: ${pathNavigate} ---------------------  id: ${manif.id} `);
 
+
     switch (pathNavigate) {
 
          case 'Inqu':
@@ -127,11 +132,23 @@ export class ManifestazioneComponent implements OnInit {
       case 'Days':
         this.route.navigate(['manif/' + manif.id]);
         break;
+      case 'GraphDays':
+        this.route.navigate(['manif/grafico/day/' + manif.id]);
+        break;
       default:
         alert('scelta errata \n navigazione non possibile');
         break;
     }
   }
+
+
+  naviga(manif: Manifestazione) {
+let aa = 'manif/grafico/day/' + manif.id;
+console.log('path per grafico: ' + aa);
+return;
+    this.route.navigate(['manif/grafico/day/' + manif.id]);
+  }
+
 
 
 // -------------------------------------------

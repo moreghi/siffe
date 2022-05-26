@@ -1,7 +1,7 @@
 import { TstatomanifestazioneInterface } from '../interfaces/t_stato_manifestazione';
 
 
-export class Tstatomanifestazione implements TstatomanifestazioneInterface {
+export class TstatoManifestazione implements TstatomanifestazioneInterface {
 
   id: number;
   d_stato_manifestazione: string;

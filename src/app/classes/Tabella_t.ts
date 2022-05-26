@@ -6,7 +6,7 @@ export class Tabellat implements TabellatInterface {
     id: number;
     nametab: string;
     d_tabella: string;
-    tipo : string;
+    tipo: string;
     fatto: string;
     key_utenti_operation: number;
     created_at: Date;

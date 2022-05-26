@@ -38,7 +38,8 @@
             <label for="descManif" class="col-sm-2 col-form-label">Descrizione:</label>
             <div class="col-sm-5">
             <input type="text" #descManif="ngModel"  [(ngModel)]="manif.descManif" class="form-control" name="descManif" id="descManif" required minlength="4" maxlength="50" pattern="[0-9a-zA-Z\s]*" placeholder="Inserire Descrizione">
-              <div *ngIf="descManif.invalid && (descManif.dirty || descManif.touched)" class="alert-danger">
+             <br>
+            <div *ngIf="descManif.invalid && (descManif.dirty || descManif.touched)" class="alert-danger">
                 <div *ngIf="descManif.errors.required">
                     <span>la descrizione è obbligatoria</span>
                 </div>
@@ -55,10 +56,11 @@
         <!-- Buono Pasto  -->
         <div class="form-row">
         <div class="mb-3 row margini">
-          <label for="buonoPastoCommanda" class="col-sm-2 col-form-label">Buono Pasto:</label>  <!--    pattern numerico  \d+(\.\d*)?|\.\d+*    /^[0-9]+(\.[0-9]*){0,1}$/g      ^[0-9]d{0,9}(.d{1,2})?%?$       -->
-          <div class="col-sm-2">
-          <input NumbersOnly type="text" #buonoPastoCommanda="ngModel"  [(ngModel)]="manif.buonoPastoCommanda" class="form-control" name="buonoPastoCommanda" id="buonoPastoCommanda" pattern="^-?[0-9][0-9,\.]+$" placeholder="Inserire Buono Pasto">
-          <div *ngIf="buonoPastoCommanda.invalid && (buonoPastoCommanda.dirty || buonoPastoCommanda.touched)" class="alert-danger">
+          <label for="buonoPastoCommanda" class="col-sm-2 col-form-label">Buono Pasto:</label>
+           <div class="col-sm-2">
+              <input NumbersOnly type="text" #buonoPastoCommanda="ngModel"  [(ngModel)]="manif.buonoPastoCommanda" class="form-control" name="buonoPastoCommanda" id="buonoPastoCommanda" pattern="^\d*(\.\d{0,2})?$" placeholder="Inserire Buono Pasto">
+              <br>
+              <div *ngIf="buonoPastoCommanda.invalid && (buonoPastoCommanda.dirty || buonoPastoCommanda.touched)" class="alert-danger">
           <!--   <div class="valid-feedback">Campo corretto</div>
                 <div class="invalid-feedback">insersci un valore corretto</div>   -->
               <div *ngIf="buonoPastoCommanda.errors.required">
@@ -67,8 +69,8 @@
               <div *ngIf="buonoPastoCommanda.errors?.pattern">
                   <span>il buono pasto non può essere negativo</span>
               </div>
-            </div>
-            </div>
+              </div>
+           </div>
           </div>
         </div>
 
@@ -78,7 +80,8 @@
         <label for="impCoperto" class="col-sm-2 col-form-label">Coperto:</label>
         <div class="col-sm-2">
         <input #impCoperto="ngModel"  [(ngModel)]="manif.impCoperto" class="form-control" name="impCoperto" id="impCoperto" pattern="^-?[0-9][0-9,\.]+$" placeholder="Inserire Coperto">
-            <div *ngIf="impCoperto.invalid && (impCoperto.dirty || impCoperto.touched)" class="alert-danger">
+        <br>
+        <div *ngIf="impCoperto.invalid && (impCoperto.dirty || impCoperto.touched)" class="alert-danger">
               <div *ngIf="impCoperto.errors.required">
                   <span>Inserire il coperto</span>
               </div>

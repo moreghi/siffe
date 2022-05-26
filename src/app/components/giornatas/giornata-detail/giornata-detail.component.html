@@ -1,16 +1,15 @@
-<p>giornata-detail works!</p>
 
 
-<!-- {{gior | json }}  -->
 
- {{giornata | json }}
+
+ <br>
 
 <div class="container borde">
 
-  <div class="header_Inqu" *ngIf="functionInqu">
+  <div class="header_Inqu" *ngIf="functionInqu  === true">
     <caption class="title_Inqu  col-md-12">{{title}}</caption>
   </div>
-  <div class="header_New" *ngIf="functionNew">
+  <div class="header_New" *ngIf="functionNew === true">
     <caption class="title_New  col-sm-12">{{title}}</caption>
   </div>
   <div class="header_Edit title_Edit" *ngIf="functionUser  ===  searchEdits   ||  functionUser  ===  searchEdit">
@@ -62,21 +61,29 @@
         </div>
     </div>
     <hr>
-    <div class="row">
-      <label for="dtGiornata" class="col-sm-2 col-form-label">Ultima Data Inserita</label>
-      <div class=" col-md-2">
-        <input readonly [(ngModel)]="gior.dtGiornata"  [ngModel]="gior.dtGiornata | date:'dd/MM/yyyy'" #dtGiornata="ngModel" class="form-control"  name="dtGiornata" id="dtGiornata"  >
-      </div>
-      <div class="input-group  col-md-4" *ngIf="foundLastday === false ">
-        <!-- <input disabled [(ngModel)]="lastdata"  [ngModel]="lastdata | date:'dd/MM/yyyy'" #lastdata="ngModel" class="form-control"  name="lastdata" id="lastdata"  > -->
-        {{neverDay}}
-       </div>
-     </div>
-     <hr>
+
+    <div class="row" *ngIf="foundLastday === true">
+      <label for="dtGiornata" class="col-sm-2 col-form-label">Ultima Data</label>
+          <div class=" col-md-2">
+            <input disabled [(ngModel)]="gior.dtGiornata"  [ngModel]="gior.dtGiornata | date:'dd/MM/yyyy'" #dtGiornata="ngModel" class="form-control"  name="dtGiornata" id="dtGiornata" placeholder="nessuna data inserita" >
+          </div>
+    </div>
+    <hr>
+
+    <div class="row" *ngIf="foundLastday === false">
+      <label for="dtGiornata" class="col-sm-2 col-form-label borde">Ultima Data</label>
+          <div class=" col-md-3">
+            <strong style="color: red">{{neverDay}}</strong>
+          </div>
+    </div>
+
+
+    giornata selezionata:  <strong style="color: red">{{giornata.dtGiornata | date:'dd/MM/yyyy'}}</strong>
+    <br>
      <div class="row">
       <label for="dtGiornata1" class="col-sm-2 col-form-label">Giornata</label>
       <div class=" col-md-2">  <!-- input-group  -->
-         <input type="date" [(ngModel)]="giornata.dtGiornata"  [ngModel]="giornata.dtGiornata | date:'dd/MM/yyyy'"  #dtGiornata1="ngModel" class="form-control"  name="dtGiornata1" id="dtGiornata1" required placeholder="dd/mm/yyyy" />{{giornata.dtGiornata}}
+         <input type="date" [(ngModel)]="giornata.dtGiornata"  [ngModel]="giornata.dtGiornata | date:'dd/MM/yyyy'"  #dtGiornata1="ngModel" class="form-control"  name="dtGiornata1" id="dtGiornata1" required placeholder="dd/mm/yyyy" />
       </div>
      </div>
     <!--
@@ -148,19 +155,20 @@
 
 
        <br>
+<!--   originale
        <div class="footer" >
             <div class="row col-sm-10 offset-2">
-              <div class="col-sm-3" *ngIf="functionNew || functionEdit || functionEdits ">
-                <button [disabled]="fm.invalid  || enabledDay === false" class="btn btn-success btn-md " (click)="conferma()">Conferma
+              <div class="col-sm-3" *ngIf="functionNew === true || functionEdit === true || functionEdits === true ">
+                <button [disabled]=" enabledDay === false" class="btn btn-success btn-md " (click)="conferma()">Conferma
                   <fa-icon [icon]="faSave"  fixed="true"></fa-icon>
                 </button>
               </div>
-              <div class="col-sm-3" *ngIf="functionNew || functionEdit || functionEdits ">
+              <div class="col-sm-3" *ngIf="functionNew === true || functionEdit === true || functionEdits === true ">
                 <button [disabled]="fm.invalid || enabledDay === false" class="btn btn-primary btn-md " (click)="reset()">Reset
                   <fa-icon [icon]="faTimes"  fixed="true"></fa-icon>
                 </button>
               </div>
-              <div class="col-sm-3"  *ngIf="functionEdits ">
+              <div class="col-sm-3"  *ngIf="functionEdits === true">
                 <button [disabled]="fm.invalid || enabledDay === false" class="btn btn-danger btn-md "  (click)="open(content)"> Cancella
                   <fa-icon [icon]="faTrash"  fixed="true"></fa-icon>
                 </button>
@@ -171,7 +179,35 @@
                 </button>
               </div>
             </div>
-       </div>
+       </div>    -->
+
+       <div class="footer" >
+        <div class="row col-sm-10 offset-2">
+          <div class="col-sm-3">
+            <button [disabled]=" enabledDay === false" class="btn btn-success btn-md " (click)="conferma()">Conferma
+              <fa-icon [icon]="faSave"  fixed="true"></fa-icon>
+            </button>
+          </div>
+          <div class="col-sm-3">
+            <button [disabled]="fm.invalid || enabledDay === false" class="btn btn-primary btn-md " (click)="reset()">Reset
+              <fa-icon [icon]="faPlus"  fixed="true"></fa-icon>
+            </button>
+          </div>
+          <div class="col-sm-3">
+            <button [disabled]="fm.invalid || enabledDay === false" class="btn btn-danger btn-md "  (click)="open(content)"> Cancella
+              <fa-icon [icon]="faTrash"  fixed="true"></fa-icon>
+            </button>
+          </div>
+          <div class="col-sm-3" >
+            <button  class="btn btn-info btn-md "  (click)="goback()"> Ritorna
+              <fa-icon [icon]="faReply"  fixed="true"></fa-icon>
+            </button>
+          </div>
+        </div>
+   </div>
+
+
+
        <br>
   <!--   messaggio con esito operazione -->
 
@@ -201,9 +237,8 @@
   </div>
   <div class="modal-body">
     <form>
-      <p>confermi la cancellazione del collaboratore &nbsp;&nbsp;</p>
-      <p></p>
-      <p><strong>{{manif.cognome}}&nbsp;&nbsp;{{manif.nome}}</strong>&nbsp;?</p>
+      <p>confermi la cancellazione della giornata &nbsp;&nbsp;<strong>{{giornata.dtGiornata | date:'dd/MM/yyyy'}}</strong>&nbsp;?</p>
+
       <!--   esempio di calendario che funziona benissimo
       <div class="form-group">
         <label for="dateOfBirth">Date of birth</label>

@@ -16,6 +16,7 @@ import { GiornataService } from './../../../services/giornata.service';
 import { CtrfuncService } from './../../../services/ctrfunc.service';
 import { ProdottoService } from './../../../services/prodotto.service';
 import { TtipologiaService } from './../../../services/ttipologia.service';
+import { CommandaService } from './../../../services/commanda.service';
 
 // per gestire il popup con esito operazione
 import { NotifierService } from 'angular-notifier';
@@ -190,6 +191,7 @@ export class GiornataDetailProdottiComponent implements OnInit {
              private manifestazioneService: ManifestazioneService,
              private prodottoService: ProdottoService,
              private ttipologiaService: TtipologiaService,
+             private commandaService: CommandaService,
              private route: ActivatedRoute,
              private router: Router,
              private datePipe: DatePipe,
@@ -607,6 +609,7 @@ export class GiornataDetailProdottiComponent implements OnInit {
     this.giornata.statoMagazzino = 1;
     if(this.giornata.statoCassa === 1 && this.giornata.statoUtenti === 1  && this.giornata.statoMagazzino === 1) {
        this.giornata.stato = 2;
+       this.resettaOldCommande();
     }
     this.giornataService.updateGiornata(this.giornata).subscribe(
        response => {
@@ -664,6 +667,24 @@ export class GiornataDetailProdottiComponent implements OnInit {
 }
 
 
+async resettaOldCommande() {
+
+  const resp =  await  this.commandaService.deleteAll().subscribe(
+    res => {
+      if(res['rc'] === 'ok') {
+         console.log('resettate commande - giornta aperta');
+      }
+    },
+     error =>
+     {
+       console.log(error);
+       this.Message = error.message;
+       this.alertSuccess = false;
+       this.type = 'error';
+       this.Message = 'resettaOldCommande - ' + this.Message;
+       this.showNotification(this.type, this.Message);
+     });
+}
 
 
 

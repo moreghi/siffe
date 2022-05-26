@@ -140,6 +140,7 @@ public searchNew = 'New';
 
 public functionUrlUp = '';
 public functionUserUp = '';
+public pathimage = '';
 
  constructor(  private modalService: NgbModal,
                private userService: UserService,
@@ -286,6 +287,7 @@ public functionUserUp = '';
            console.log('loadUser:    .....              ' + JSON.stringify(['data']));
            this.user = resp['data'];
            this.user.key_utenti_operation = +localStorage.getItem('id');
+           this.pathimage = environment.APIURL + '/upload/files/users/' + this.user.photo;
            this.selectedRuo = this.user.idRuolo;
            this.selectedweb = this.user.idruoloweb;
            this.selectedSta = this.user.idStato;

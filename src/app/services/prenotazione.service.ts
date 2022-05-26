@@ -132,4 +132,17 @@ getPrenotazinibyemail(email: string) {
  });      // ok      // ok
 }
 
+
+// invio email dopo conferma definitiva prenotazione
+sendemailPrenotazioneConfermataMoreno(prenotazione: Prenotazione) {
+
+  console.log('frontend - prenotazioneConfirm.service - sendemailPrenotazioneConfermataMoreno ------  :  ' + JSON.stringify(prenotazione));
+
+  return this.http.post(this.APIURL + '/pren/invioemailprenotazione/' + prenotazione.email, prenotazione);
+
+  }
+
+
+
+
 }

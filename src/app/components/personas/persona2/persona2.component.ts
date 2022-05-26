@@ -17,11 +17,13 @@ export class Persona2Component implements OnInit {
  // variabili passate dal componente padre
  @Input('persona2-data') persona: Persona;
  @Input('persona2-prog') i: number;
+ @Input('functionUser') functionUser: string;
 
 // passo dati a persona-detail
  @Output('onSelectPersona') onSelectPersona = new EventEmitter();
 
-
+// passo al Padre la segnalazione che ho effettuato la cancellazione- serve per rifare l'elemco aggiornato
+@Output('onDeletePersona') onDeletePersona = new EventEmitter();
 
 
  faUserEdit = faUserEdit;
@@ -65,6 +67,8 @@ export class Persona2Component implements OnInit {
  public keys = '';
  public tipo = '';
  public routePersona = '';
+ public deletedPersona = 'Dpersona';
+  public errordeletedPersona = 'errorDpersona';
 
  closeResult = '';
 
@@ -94,9 +98,32 @@ export class Persona2Component implements OnInit {
 
 selectedPersona() {
 
-  this.onSelectPersona.emit(this.persona);
+ // this.onSelectPersona.emit(this.persona);
 }
 
+showPersonaDetail(functionUser: string) {
+ // alert('da fare -  functionUser passata dal Padre : ' + functionUser);
+
+  switch (functionUser) {
+
+       case 'Inqu':
+     //  let aa = this.router.navigate(['/users/id/inqu', id]);
+     //  console.log('aaaaa ' + aa);
+
+      this.route.navigate(['persona/inqu/' + this.persona.id]);
+      break;
+    case 'Edit':
+      this.route.navigate(['persona/edit/'  + this.persona.id]);
+      break;
+    case 'Edits':
+      this.route.navigate(['persona/edits/'  + this.persona.id]);
+      break;
+    default:
+      alert('scelta errata \n navigazione non possibile');
+      break;
+  }
+
+}
 
 
 /**
@@ -150,10 +177,10 @@ open(content:any, persona: Persona) {
   if(result === 'Delete click') {
     console.log('fare routine di cancellazione: ' + persona.id + ' - ' + persona.cognome );
    //this.cancellaProdotto(this.prodotto);
-   this.delete(persona.id);
-   this.cancellazioneCompleted(persona);
+    this.cancellaPersona(persona);
+  //  this.cancellazioneCompleted(persona);   buttare
    // per riaggiornare elenco
-   window.location.reload();
+  //                                 window.location.reload();
 
   }
   }, (reason) => {
@@ -181,12 +208,15 @@ open(content:any, persona: Persona) {
     this.showNotification(this.type, this.Message);
   }
 
+  /*
   cancellazioneCompleted(persona: Persona) {
     this.type = 'success';
     this.Message = `cancellazione della persona ${persona.cognome}&nbsp;${persona.nome}  eseguita con successo `;
     this.showNotification(this.type, this.Message);
   }
 
+  */
+  /*   da buttare
   delete(id:any) {
     console.log(id,'cancelllllllllllllllllllllllo --->');
     this.personaService.deletePersona(id).subscribe((res)=> {
@@ -197,6 +227,62 @@ open(content:any, persona: Persona) {
       this.showNotification(this.type, this.Message);
     });
   }
+
+  */
+
+  async  cancellaPersona(persona: Persona) {
+    console.log('cancella - emetto onDeletepersona');
+    let rc = await  this.personaService.deletePersona(persona).subscribe(
+      response => {
+        if(response['rc'] === 'ok') {
+          // imposto l'evento per passare la segnalazione di cancellazione al padre
+          this.onDeletePersona.emit(this.deletedPersona);
+          this.isVisible = true;
+          this.alertSuccess = true;
+          this.type = 'success';
+          this.Message = 'Persona cancellata correttamente';
+          this.showNotification(this.type, this.Message);
+        }
+    },
+    error =>
+        {
+          /*
+         let errore =  error.error.message;
+         console.log('errore-1: ' + errore);
+         errore = errore.substr(7, 68);
+         console.log('errore-2............: ' + errore);
+         console.log('error.error.message ................. ' + error.error.message);
+         console.log('error.name ................. ' + error.name);
+*/
+         const test = 'Cannot delete or update a parent row: a foreign key constraint fails';
+
+         const str = error.error.message;
+         const substr = 'Cannot delete or update a parent row: a foreign key constraint fails';
+
+         console.log(' controllo se errore contiene una string particolare :' + str.includes(substr));
+
+
+
+         if(str.includes(substr)) {
+            console.log('trovato errore - imposto event');
+            this.onDeletePersona.emit(this.errordeletedPersona);
+            console.log('trovato errore - impostato -------------------------- event');
+            //return;
+        }  else {
+          this.isVisible = true;
+          this.alertSuccess = false;
+          this.type = 'error';
+          console.log('error.message: ' + error.message);
+          console.log('error.error.message: ' + error.error.message);
+          this.Message = 'Errore cancellazione persoona' + '\n' + error.error.message;
+          this.showNotification(this.type, this.Message);
+          console.log(error);
+        }
+
+        });
+  }
+
+
 
 
 

@@ -19,7 +19,7 @@ import { GrapfService } from './../../../services/grapf.service';
 // other
 import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { faUndo, faSave, faHandPointLeft, faTrashAlt, faInfoCircle, faThumbsUp, faThumbsDown, faSearch,
-          faPlusSquare, faTrash, faUserEdit, faWindowClose, faMinus, faPlus, faReply, faAlignLeft, faChartLine } from '@fortawesome/free-solid-svg-icons';
+          faPlusSquare, faTrash, faUserEdit, faWindowClose, faMinus, faPlus, faReply, faAlignLeft, faChartLine, faFire, faTruck } from '@fortawesome/free-solid-svg-icons';
 import {formatDate} from '@angular/common';
 // per gestire il popup con esito operazione
 import { NotifierService } from 'angular-notifier';
@@ -57,6 +57,8 @@ export class GestioneComponent implements OnInit {
     faThumbsDown = faThumbsDown;
     faAlignLeft = faAlignLeft;
     faChartLine = faChartLine;
+    faFire = faFire;
+    faTruck = faTruck;
 
     // variabili per editazione messaggio
     public alertSuccess = false;
@@ -73,6 +75,7 @@ export class GestioneComponent implements OnInit {
     public saveValueStd: boolean;
     public lastNumber = 0;
     public fase = '';
+    public faseLavorativa = '';
 
 
     public isLoading = false;
@@ -259,6 +262,8 @@ export class GestioneComponent implements OnInit {
    public enabledCucina = false;
    public enabledBevande = false;
    public competenza = 0;
+   public flagLavorazione = 0;
+   public flagConsegna = 0;
 
    public  interval = 'minutes';
    public  mm = 0;
@@ -270,6 +275,7 @@ export class GestioneComponent implements OnInit {
    p_prod: number = 1;
    p_righe: number = 1;
    p_graph: number = 1;
+   p_comm: number = 1;
 
    public idlogged = 0;
    public visibleCommande = false;
@@ -286,13 +292,14 @@ export class GestioneComponent implements OnInit {
    public nessunaCommanda = false;
    public visibleFull = false;
    public enabledGrafici = false;
+   public commandatoedit = false;
 
    // flag da rivedere
    public selezionatoxx = false;
 
    public trovatoRecRighe = false;
    public enabledRighe = false;
-
+   public tipolavorazione = '';
    public today: Date;
 
    public orderby = '';
@@ -504,6 +511,7 @@ console.log('title: ' + this.title);
                       break;
                   case 'Commande':
                       this.visibleCommande = true;
+                      this.commandatoedit = false;
 
                       break;
                   default:
@@ -516,6 +524,7 @@ console.log('title: ' + this.title);
 
 
               onSelectionChangeMenu(tipo: string)   {
+                 console.log('------------------------------------------     onSelectionChangeMenu + tipo: ' + tipo);
                  this.selectFinal = false;
                  this.tipoSelected = tipo;
                  this.visibleProdotto = true;
@@ -552,7 +561,11 @@ console.log('title: ' + this.title);
                           alert('Scelta errata' + '\n' + 'ricerca non possibile');
                           break;
                  }
-                 this.loadProdottibyTipologia(this.tipologia);
+
+
+                // this.loadProdottibyTipologia(this.tipologia);
+                this.orderby = '*';    // imposto ordinamento per commanda
+                this.getAllCommande(this.orderby);
             }
 
 
@@ -831,7 +844,6 @@ onSelectionChangeProd(tipo: string)   {
 
 
 
-
          onSelectionChangeComm(tipo: string) {
          //  alert('da fare');
            this.selectSelettiva = false;
@@ -863,6 +875,7 @@ onSelectionChangeProd(tipo: string)   {
              }
          }
 
+
    async   getAllCommandebyStato(stato: number, order: string) {
 
     console.log(`getAllCommandebyStato - appena entrato --  stato ${stato} ----- order: ${order}` );
@@ -874,7 +887,7 @@ onSelectionChangeProd(tipo: string)   {
       this.competenza = 2;
      }
 
-
+    console.log('getAllCommandebyStato - parametri  -- Giornata ' + this.idGiornata + ' stato:  ' + stato + ' competenza: ' + this.competenza);
     let rc = await this.commandaService.getCommandeforGiornataeCompetenzaestato(this.idGiornata, this.competenza, stato, order).subscribe(
     resp => {
         if(resp['rc'] === 'ok') {
@@ -1130,6 +1143,11 @@ onSelectionChangeProd(tipo: string)   {
           this.riaggiornaDatiSelezionati();
         }
 
+        annulla(commandariga: Commandariga) {
+          alert('annulla lavorazione fatta');
+        }
+
+
         consegnare(commandariga: Commandariga) {
           alert(' devo consegnare il prodotto ' + commandariga.descrizione_prodotto);
 
@@ -1305,14 +1323,43 @@ onSelectionChangeProd(tipo: string)   {
          }
       }
 
- async     viewrigheCommanda(id: number) {
-        // visualizzo le righe dei prodotti della commanda
+ async    CommandaviewrigheCucina(id: number) {
+        // visualizzo le righe dei prodotti della commanda    // merda
 
-        console.log(`viewrigheCommanda - appena entrato ` );
-        let rc = await this.commandarigaService.getProdbyCommanda(id).subscribe(
+        console.log(`CommandaviewrighCucina - appena entrato ` );
+        if(this.enabledCucina === true) {
+          this.competenza = 1;
+         }
+        if(this.enabledBevande === true) {
+          this.competenza = 2;
+         }
+        this.tipolavorazione = "Cucina";
+        this.faseLavorativa = 'Cu';
+        this.getrighebyCommaandaeCompetenza(id, this.competenza, this.faseLavorativa);
+
+      }
+
+      async    CommandaviewrigheConsegna(id: number) {
+        console.log(`CommandaviewrighConsegna- appena entrato ` );
+        if(this.enabledCucina === true) {
+          this.competenza = 1;
+         }
+        if(this.enabledBevande === true) {
+          this.competenza = 2;
+         }
+        this.tipolavorazione = "Consegna";
+        this.faseLavorativa = 'Co';
+        this.getrighebyCommaandaeCompetenza(id, this.competenza, this.faseLavorativa);
+
+       }
+
+
+    async getrighebyCommaandaeCompetenza(id: number, comp: number, fase: string) {
+
+      let rc = await this.commandarigaService.getrighebyCommandaeCompetenza(id, comp, fase).subscribe(
         resp => {
             if(resp['rc'] === 'ok') {
-              console.log('getAllProdottibytipologia .... result ' + JSON.stringify(resp['data']) + ' record: ' + resp['number']);
+              console.log('getrighebyCommaandaeCompetenza .... result ' + JSON.stringify(resp['data']) + ' record: ' + resp['number']);
               this.commandarighe = resp['data'];
               this.trovatoRec = true;
               this.nRecPr = resp['number'];
@@ -1326,21 +1373,94 @@ onSelectionChangeProd(tipo: string)   {
             }
           },
         error => {
-            alert('sono in getAllProdottibytipologia - error');
+            alert('sono in getrighebyCommaandaeCompetenza - error');
             this.isVisible = true;
             this.alertSuccess = false;
-            console.log('getAllProdottibytipologia - errore: ' + error);
+            console.log('getrighebyCommaandaeCompetenza - errore: ' + error);
             this.type = 'error';
             this.Message = error.message;
             this.alertSuccess = false;
             this.showNotification(this.type, this.Message);
         });
-      }
+    }
+
+    CucinaProdotto(commandariga: Commandariga) {
+
+      commandariga.flag_lavorazione = 1;
+      this.message = commandariga.descrizione_prodotto + ' inviato in Cucina !!';
+      this.AggiornStatoRigaCommanda(commandariga,  this.message);
+    }
+
+    AnnullaCucinaProdotto(commandariga: Commandariga) {
+      commandariga.flag_lavorazione = 0;
+      this.message = commandariga.descrizione_prodotto + ' tolto dallaCucina !!';
+      this.AggiornStatoRigaCommanda(commandariga,  this.message);
+    }
+
+    ConsegnaProdotto(commandariga: Commandariga) {
+      commandariga.flag_consegna = 1;
+      this.message = commandariga.descrizione_prodotto + ' Consegnato !!';
+      this.AggiornStatoRigaCommanda(commandariga,  this.message);
+    }
+
+    AnnullaConsegnaProdotto(commandariga: Commandariga) {
+      commandariga.flag_consegna = 0;
+      this.message = commandariga.descrizione_prodotto + ' da consegnare !!';
+      this.AggiornStatoRigaCommanda(commandariga,  this.message);
+    }
+
+
+
+    async AggiornStatoRigaCommanda(commandariga: Commandariga, messaggio: string) {
+      console.log('AggiornaStatoRigaommanda - appena entrato : ' + JSON.stringify(commandariga));
+
+
+
+
+      let rc = await this.commandarigaService.updateCommandariga(commandariga).subscribe(
+        resp => {
+            if(resp['rc'] === 'ok') {
+              console.log('aggiornata commandaRiga .... result ' + JSON.stringify(resp['data']));
+              this.isVisible = true;
+              this.alertSuccess = true;
+              this.Message = messaggio;
+              this.showNotification(this.type, this.Message);
+              if(this.faseLavorativa === 'Co') {
+                this.CommandaviewrigheConsegna(commandariga.idCommanda);
+              }
+              if(this.faseLavorativa === 'Cu') {
+                this.CommandaviewrigheCucina(commandariga.idCommanda);
+              }
+            }
+            if(resp['rc'] === 'nf') {
+              this.isVisible = true;
+              this.alertSuccess = false;
+              this.Message = 'Prodotto inesistente - aggiornamento non possibile !!';
+              this.showNotification(this.type, this.Message);
+            }
+          },
+        error => {
+            alert('sono in AggiornStatoRigaCommanda - error');
+            this.isVisible = true;
+            this.alertSuccess = false;
+            console.log('AggiornStatoRigaCommanda - errore: ' + error);
+            this.type = 'error';
+            this.Message = error.message;
+            this.alertSuccess = false;
+            this.showNotification(this.type, this.Message);
+        });
+
+    }
+
+
+
+
+
 
 
       statistica() {
        // alert(' da fare');
-        this.enabledGrafici = true;
+      //  this.enabledGrafici = true;
         if(this.idLevel === -1 && this.c2 === 'gestioneCucina' || this.idLevel === 2) {
           this.enabledCucina = true;
          }
@@ -1825,6 +1945,42 @@ async editdatiGraph() {
               this.showNotification(this.type, this.Message);
        }
    }
+
+
+
+  async   onSelectCommanda(commanda: Commanda) {
+
+    alert('onSelectCommanda - commanda selected: ' + JSON.stringify(commanda));
+
+    let rc = await this.commandarigaService.getrighebyCommanda(commanda.id).subscribe(
+     resp => {
+         if(resp['rc'] === 'ok') {
+           console.log('getAllrigheCommanda .... result ' + JSON.stringify(resp['data']) + ' record: ' + resp['number']);
+           this.commandarighe = resp['data'];
+           this.commandatoedit = true;
+         }
+         if(resp['rc'] === 'nf') {
+           this.commandarighe = this.commandarighenull;
+         }
+       },
+     error => {
+         alert('sono in onSelectCommanda- error');
+         this.isVisible = true;
+         this.alertSuccess = false;
+         console.log('onSelectCommanda - errore: ' + error);
+         this.type = 'error';
+         this.Message = error.message;
+         this.alertSuccess = false;
+         this.showNotification(this.type, this.Message);
+     });
+
+
+
+      }
+
+
+
+
 
 
 

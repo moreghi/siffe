@@ -27,7 +27,7 @@ export class Prodotto4Component implements OnInit {
 
 // passo dati a persona-detail
   @Output('onSelectProdotto') onSelectProdotto = new EventEmitter();
-// passo al figlio la segnalazione che ho effettuato la cancellazione- serve per rifare l'elemco aggiornato
+// passo al Padre la segnalazione che ho effettuato la cancellazione- serve per rifare l'elemco aggiornato
 @Output('onDeleteProdotto') onDeleteProdotto = new EventEmitter();
 
   // prod: Prodotto;
@@ -153,7 +153,7 @@ showNotification( type: string, message: string ): void {
   */
 
   showProdottoDetail(functionUser: string) {
-    alert('da fare -  functionUser passata dal Padre : ' + functionUser);
+  //  alert('da fare -  functionUser passata dal Padre : ' + functionUser);
 
     switch (functionUser) {
 

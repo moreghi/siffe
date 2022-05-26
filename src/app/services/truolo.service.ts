@@ -12,6 +12,7 @@ import { AuthService } from '../services/auth.service';
 export class TruoloService {
 
   private rotta = "/truolo";
+  private rottafunction = '';
 
   private APIURL = environment.APIURL + this.rotta;  // definisco l'url su cui effettuare la lettura sul server
 
@@ -20,7 +21,7 @@ export class TruoloService {
 
  // attenzione: per ogni funzione che voglio usare DEVO passare il token per dimostrare che sono loggato
 
-/*
+
  getAuthHeader(): HttpHeaders   {
    // passo il token dentro a header per non farlo passare in chiaro su url
 
@@ -31,7 +32,7 @@ export class TruoloService {
      );
      return headers;
    }
- */
+
 
 
  getRuoli():Observable<any> {
@@ -44,91 +45,40 @@ export class TruoloService {
        //  return this.http.get(this.APIURL + '?token=' + this.auth.getToken());       // <---- 1° metodo  in chiaro su url
 
        // secondo metodo passando il token non in chiaro come header                   // <---- 2* metodo come header (non in chiaro)
-        return this.http.get(this.APIURL);      // ok
-
-       }
-
-       getRuolo(id: number) {
-         return this.http.get(this.APIURL + '/' + id);
-       }
-
-
-       deleteRuolo(ruolo: Truolo) {
-         return this.http.delete(this.APIURL + '/' + ruolo.id);
-
-       }
-
-   updateRuolo(ruolo: Truolo) {
-
-     // imposto il metodo put pervhè laravel non gestisce e devo utilizzare il post per camuffare
-     //
-     //   return this.http.patch(this.APIURL + '/' + user.id,user);
-     ruolo['_method'] = 'PUT';
-
-     return this.http.patch(this.APIURL + '/' + ruolo.id, ruolo);
-
-   }
-
-    createRuolo(ruolo: Truolo){
-     return this.http.post(this.APIURL, ruolo);
-   }
-
-/*    versione con authHeader
-
- getRuoli() {
-
-   // ritorniamo un observoble - il subscribe devo farlo su users.component.ts
-
-   // la chiamata la faccio solo se ho il token per abilitare la lettura solo a uteti loggati
-
-       // primo metodo passando il token in chiaro su url
-       //  return this.http.get(this.APIURL + '?token=' + this.auth.getToken());       // <---- 1° metodo  in chiaro su url
-
-       // secondo metodo passando il token non in chiaro come header                   // <---- 2* metodo come header (non in chiaro)
         return this.http.get(this.APIURL,  {
-         headers: this.getAuthHeader()
-       });      // ok
+          headers: this.getAuthHeader()
+          });      // ok      // ok      // ok);      // ok
 
        }
 
-       getRuolo(id: number) {
+      getRuolo(id: number) {
          return this.http.get(this.APIURL + '/' + id,  {
-           headers: this.getAuthHeader()
-         });
+          headers: this.getAuthHeader()
+          });      // ok      // ok);
        }
 
 
-       deleteRuolo(ruolo: Truolo) {
-         return this.http.delete(this.APIURL + '/' + ruolo.id,  {
-           headers: this.getAuthHeader()
-         });
-
+      deleteRuolo(ruolo: Truolo) {
+        this.rottafunction = 'deletebyid';
+        return this.http.delete(this.APIURL + '/' + this.rottafunction + '/' + ruolo.id,  {
+            headers: this.getAuthHeader()
+            });
        }
 
-   updateRuolo(ruolo: Truolo) {
+      updateRuolo(ruolo: Truolo) {
 
-     // imposto il metodo put pervhè laravel non gestisce e devo utilizzare il post per camuffare
-     //
-     //   return this.http.patch(this.APIURL + '/' + user.id,user);
-     ruolo['_method'] = 'PUT';
+        this.rottafunction = 'updatebyid';
+        return this.http.put(this.APIURL + '/' + this.rottafunction + '/' + ruolo.id, ruolo,  {
+            headers: this.getAuthHeader()
+            });
+        }
 
-     return this.http.patch(this.APIURL + '/' + ruolo.id, ruolo,  {
-       headers: this.getAuthHeader()
-     });
-
-   }
-
-    createRuolo(ruolo: Truolo){
-     return this.http.post(this.APIURL, ruolo,  {
-       headers: this.getAuthHeader()
-     });
-   }
-
-
-
-
-*/
-
+      createRuolo(ruolo: Truolo){
+            this.rottafunction = 'create';
+            return this.http.post(this.APIURL + '/' + this.rottafunction, ruolo,  {
+            headers: this.getAuthHeader()
+            });
+       }
 
 
 }

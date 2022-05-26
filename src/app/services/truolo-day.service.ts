@@ -12,7 +12,7 @@ import { AuthService } from '../services/auth.service';
 export class TruoloDayService {
 
   private rotta = '/truoloday';
-
+  private rottafunction = '';
   private APIURL = environment.APIURL + this.rotta;  // definisco l'url su cui effettuare la lettura sul server
 
   constructor(private http: HttpClient,
@@ -32,16 +32,7 @@ export class TruoloDayService {
    }
 
   getAll():Observable<any> {
-
-   // ritorniamo un observoble - il subscribe devo farlo su users.component.ts
-
-   // la chiamata la faccio solo se ho il token per abilitare la lettura solo a uteti loggati
-
-       // primo metodo passando il token in chiaro su url
-       //  return this.http.get(this.APIURL + '?token=' + this.auth.getToken());       // <---- 1° metodo  in chiaro su url
-
-       // secondo metodo passando il token non in chiaro come header                   // <---- 2* metodo come header (non in chiaro)
-        return this.http.get(this.APIURL,  {
+       return this.http.get(this.APIURL,  {
           headers: this.getAuthHeader()
         });      // ok      // ok
 
@@ -54,79 +45,27 @@ export class TruoloDayService {
        }
 
 
-      delete(ruoloday: Truoloday) {
-         return this.http.delete(this.APIURL + '/' + ruoloday.id,  {
-          headers: this.getAuthHeader()
-        });      // ok);
+  delete(ruoloday: Truoloday) {
+        this.rottafunction = 'deletebyid';
+        return this.http.delete(this.APIURL + '/' + this.rottafunction + '/' + ruoloday.id,  {
+            headers: this.getAuthHeader()
+            });
 
        }
 
-      update(ruoloday: Truoloday) {
-           return this.http.put(this.APIURL + '/' + ruoloday.id, ruoloday,  {
-            headers: this.getAuthHeader()
-          });      // ok);
+  update(ruoloday: Truoloday) {
+          this.rottafunction = 'updatebyid';
+          return this.http.put(this.APIURL + '/' + this.rottafunction + '/' + ruoloday.id, ruoloday,  {
+              headers: this.getAuthHeader()
+              });
          }
 
-      create(ruoloday: Truoloday){
-     return this.http.post(this.APIURL, ruoloday,  {
-      headers: this.getAuthHeader()
-    });      // ok);
+  create(ruoloday: Truoloday){
+        this.rottafunction = 'create';
+    return this.http.post(this.APIURL + '/' + this.rottafunction, ruoloday,  {
+    headers: this.getAuthHeader()
+    });
    }
 
-/*    versione con authHeader
-
- getRuoli() {
-
-   // ritorniamo un observoble - il subscribe devo farlo su users.component.ts
-
-   // la chiamata la faccio solo se ho il token per abilitare la lettura solo a uteti loggati
-
-       // primo metodo passando il token in chiaro su url
-       //  return this.http.get(this.APIURL + '?token=' + this.auth.getToken());       // <---- 1° metodo  in chiaro su url
-
-       // secondo metodo passando il token non in chiaro come header                   // <---- 2* metodo come header (non in chiaro)
-        return this.http.get(this.APIURL,  {
-         headers: this.getAuthHeader()
-       });      // ok
-
-       }
-
-       getRuolo(id: number) {
-         return this.http.get(this.APIURL + '/' + id,  {
-           headers: this.getAuthHeader()
-         });
-       }
-
-
-       deleteRuolo(ruolo: Truolo) {
-         return this.http.delete(this.APIURL + '/' + ruolo.id,  {
-           headers: this.getAuthHeader()
-         });
-
-       }
-
-   updateRuolo(ruolo: Truolo) {
-
-     // imposto il metodo put pervhè laravel non gestisce e devo utilizzare il post per camuffare
-     //
-     //   return this.http.patch(this.APIURL + '/' + user.id,user);
-     ruolo['_method'] = 'PUT';
-
-     return this.http.patch(this.APIURL + '/' + ruolo.id, ruolo,  {
-       headers: this.getAuthHeader()
-     });
-
-   }
-
-    createRuolo(ruolo: Truolo){
-     return this.http.post(this.APIURL, ruolo,  {
-       headers: this.getAuthHeader()
-     });
-   }
-
-
-
-
-*/
 
 }

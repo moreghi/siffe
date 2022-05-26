@@ -311,12 +311,14 @@ constructor(public modalService: NgbModal,
 
    switch (this.fase)  {
        case 'N':
+         this.manif.anno = new Date().getFullYear();
          let rc = await  this.manifestazioneService.createManifestazione(this.manif).subscribe(
          res => {
                this.manif = res['data'];
                this.type = 'success';
-               this.Message =  res['message'];                               //'utente  creato con successo';
+               this.Message =  res['message'];
                this.alertSuccess = true;
+               this.router.navigate(['/manif']);
             },
            error => {
               console.log(error);

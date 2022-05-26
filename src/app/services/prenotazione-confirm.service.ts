@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PrenotazioneConfirm } from '../classes/PrenotazioneConfirm';
+import { Prenotazione } from '../classes/Prenotazione';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { observable, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -30,6 +31,7 @@ export class PrenotazioneConfirmService {
   constructor(private http: HttpClient, private auth: AuthService) { }
 
   public preConf: PrenotazioneConfirm;
+  public prenotazione: Prenotazione;
 
   // la prenotazione va fatta senza loggarsi
 
@@ -104,7 +106,8 @@ export class PrenotazioneConfirmService {
 
 
 // registrazione prenotazione cena a sanfra tramite mail 2022/03/16
-registerConfermetPrenotazioneMoreno(cognome: string, nome: string, email: string, telefono: string, giornata: string, numpersone: number, idGiornata: number) {
+registerConfermetPrenotazioneMoreno(cognome: string, nome: string, email: string, telefono: string,
+                                    giornata: string, numpersone: number, idGiornata: number) {
 
   console.log(`frontend - prenotazioneConfirm.service - registerConfermetPrenotazioneMoreno ------  inizio -- cognome passato: ${cognome} ` );
 
@@ -129,8 +132,6 @@ registerConfermetPrenotazioneMoreno(cognome: string, nome: string, email: string
   //  return this.http.post(`this.APIAUTHURL/gmmailforregister`,  this.registerconfirmed );
 
 }
-
-
 
 
 

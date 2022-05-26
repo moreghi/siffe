@@ -95,7 +95,7 @@ export class Cassaw1Component implements OnInit {
 
   async  loadTaglia(id: number) {
     console.log(`loadTaglia - appena entrato`);
-    let rc = await this.ttagliaService.getbyId(id).subscribe(
+    let rc = await this.ttagliaService.getbyid(id).subscribe(
      resp => {
            console.log(`loadTaglia:  ${JSON.stringify(resp['data'])} `);
            if(resp['rc'] === 'ok') {

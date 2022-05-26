@@ -61,7 +61,7 @@ export class RequestPrenotazioneComponent implements OnInit {
   public datagiaRichiesta = false;
   public selectedGiornataValue = 0;
   public dataSelected = '';
-  public dataPrenotata: Date;
+  public dataPrenotata: string;       //Date;
   public numPre = 0;
   // icone
   faTrash = faTrash;
@@ -236,7 +236,8 @@ export class RequestPrenotazioneComponent implements OnInit {
 
 
                  let res =  this.auth.sendAccountConfirmedLink
-                                 (form.value.email, form.value.cognome, form.value.name, form.value.username, form.value.password).subscribe(
+                                 (form.value.email, form.value.cognome, form.value.name, form.value.username, form.value.password)
+                                 .subscribe(
                      resp => {
                            console.log('effettuata la send email per ' + form.value.email);
                      },
@@ -274,7 +275,8 @@ export class RequestPrenotazioneComponent implements OnInit {
         //                                                             form.value.telefono, this.dataPrenotata , form.value.persone);
 
                 const res =  this.prenotazioneConfirmService.registerConfermetPrenotazioneMoreno
-                              (this.cognome.toLowerCase(), this.nome.toLowerCase(), this.email.toLowerCase(), form.value.telefono, this.dataSelected , form.value.persone, this.giornata.id)
+                              (this.cognome.toLowerCase(), this.nome.toLowerCase(), this.email.toLowerCase(),
+                              form.value.telefono, this.dataSelected , form.value.persone, this.giornata.id)
                               .subscribe(
                      resp => {
                              console.log('effettuata la send email per ' + form.value.email);

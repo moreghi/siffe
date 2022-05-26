@@ -115,7 +115,13 @@ export class CommandarigaService {
       }
 
 
+      getrighebyCommandaeCompetenza(id: number, comp: number, fase: string) {
+        this.rottafunction = 'commanda';
+        return this.http.get(this.APIURL + '/' + this.rottafunction + '/' + id + '/comp/' + comp + '/fase/' + fase,  {
+              headers: this.getAuthHeader()
+            });      // ok;
 
+      }
 
 
 // --------------------------  metodi da portare in backend (testare con postman)  2022/02/11

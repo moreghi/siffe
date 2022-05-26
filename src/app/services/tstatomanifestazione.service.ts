@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Tstatomanifestazione } from '../classes/T_stato_manifestazione';
+import { TstatoManifestazione } from '../classes/T_stato_manifestazione';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { observable, Observable } from 'rxjs';
@@ -12,6 +12,7 @@ import { AuthService } from '../services/auth.service';
 export class TstatomanifestazioneService {
 
   private rotta = "/tstatomanifestazione";
+  private rottafunction = '';
 
   private APIURL = environment.APIURL + this.rotta;  // definisco l'url su cui effettuare la lettura sul server
 
@@ -20,7 +21,7 @@ export class TstatomanifestazioneService {
 
  // attenzione: per ogni funzione che voglio usare DEVO passare il token per dimostrare che sono loggato
 
-/*
+
  getAuthHeader(): HttpHeaders   {
    // passo il token dentro a header per non farlo passare in chiaro su url
 
@@ -31,95 +32,49 @@ export class TstatomanifestazioneService {
      );
      return headers;
    }
- */
 
 
-   getAll():Observable<any> {
 
-    // ritorniamo un observoble - il subscribe devo farlo su users.component.ts
+  getAll() {
+    return this.http.get(this.APIURL,  {
+      headers: this.getAuthHeader()
+    });
+  }
 
-    // la chiamata la faccio solo se ho il token per abilitare la lettura solo a uteti loggati
-
-        // primo metodo passando il token in chiaro su url
-        //  return this.http.get(this.APIURL + '?token=' + this.auth.getToken());       // <---- 1° metodo  in chiaro su url
-
-        // secondo metodo passando il token non in chiaro come header                   // <---- 2* metodo come header (non in chiaro)
-         return this.http.get(this.APIURL);      // ok
-
-        }
-
-   getbyId(id: number) {
-          return this.http.get(this.APIURL + '/' + id);
-        }
+  getbyId(id: number) {
+          return this.http.get(this.APIURL + '/' + id,  {
+          headers: this.getAuthHeader()
+        });
+  }
 
 
-       delete(statomanif: Tstatomanifestazione)
-        {
-          return this.http.delete(this.APIURL + '/' + statomanif.id);
-
-        }
-
-       update(statomanif: Tstatomanifestazione) {
-            return this.http.put(this.APIURL + '/' + statomanif.id, statomanif);
-          }
-
-       create(statomanif: Tstatomanifestazione){
-      return this.http.post(this.APIURL, statomanif);
-    }
-
-/*    versione con authHeader
-
- getRuoli() {
-
-   // ritorniamo un observoble - il subscribe devo farlo su users.component.ts
-
-   // la chiamata la faccio solo se ho il token per abilitare la lettura solo a uteti loggati
-
-       // primo metodo passando il token in chiaro su url
-       //  return this.http.get(this.APIURL + '?token=' + this.auth.getToken());       // <---- 1° metodo  in chiaro su url
-
-       // secondo metodo passando il token non in chiaro come header                   // <---- 2* metodo come header (non in chiaro)
-        return this.http.get(this.APIURL,  {
+  delete(statomanif: TstatoManifestazione) {
+       this.rottafunction = 'deletebyid';
+       return this.http.delete(this.APIURL + '/' + this.rottafunction + '/' + statomanif.id,  {
          headers: this.getAuthHeader()
-       });      // ok
+       });
+  }
 
-       }
+ update(statomanif: TstatoManifestazione) {
+            this.rottafunction = 'updatebyid';
+            return this.http.put(this.APIURL + '/' + this.rottafunction + '/' + statomanif.id, statomanif,  {
+              headers: this.getAuthHeader()
+            });
+  }
 
-       getRuolo(id: number) {
-         return this.http.get(this.APIURL + '/' + id,  {
-           headers: this.getAuthHeader()
-         });
-       }
-
-
-       deleteRuolo(ruolo: Truolo) {
-         return this.http.delete(this.APIURL + '/' + ruolo.id,  {
-           headers: this.getAuthHeader()
-         });
-
-       }
-
-   updateRuolo(ruolo: Truolo) {
-
-     // imposto il metodo put pervhè laravel non gestisce e devo utilizzare il post per camuffare
-     //
-     //   return this.http.patch(this.APIURL + '/' + user.id,user);
-     ruolo['_method'] = 'PUT';
-
-     return this.http.patch(this.APIURL + '/' + ruolo.id, ruolo,  {
-       headers: this.getAuthHeader()
-     });
-
+ create(statomanif: TstatoManifestazione){
+      this.rottafunction = 'create';
+      return this.http.post(this.APIURL + '/' + this.rottafunction, statomanif,  {
+        headers: this.getAuthHeader()
+      });
    }
 
-    createRuolo(ruolo: Truolo){
-     return this.http.post(this.APIURL, ruolo,  {
-       headers: this.getAuthHeader()
-     });
-   }
+ getlastid() {
+      this.rottafunction = 'lastid';
+      return this.http.get(this.APIURL + '/' + this.rottafunction ,  {
+        headers: this.getAuthHeader()
+      });
+  }
 
 
-
-
-*/
 }

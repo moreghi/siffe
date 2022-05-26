@@ -6,6 +6,7 @@ export class TtipocommandaInterface  {
   d_tipo_commanda: string;
   tappo: string;
   key_utenti_operation: number;
-  data_operation: Date;
+  created_at: Date;
+  updated_at: Date;
 
 }

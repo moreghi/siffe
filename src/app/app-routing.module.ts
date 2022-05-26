@@ -60,6 +60,10 @@ import { SpesaDetailComponent } from './components/speses/spesa-detail/spesa-det
 import { SpeseComponent } from './components/speses/spese/spese.component';
 import { ManifestazioneDetailBilancioComponent } from './components/manifestaziones/manifestazione-detail-bilancio/manifestazione-detail-bilancio.component';
 import { PersoneComponent } from './components/personas/persone/persone.component';
+import { PersonaDetailComponent } from './components/personas/persona-detail/persona-detail.component';
+import { ManifestazioneDetailDayGraphComponent } from './components/manifestaziones/manifestazione-detail-day-graph/manifestazione-detail-day-graph.component';
+import { InfoPrenotazioneComponent } from './components/prenotaziones/info-prenotazione/info-prenotazione.component';
+import { TabelleComponent } from './components/tabelles/tabelle/tabelle.component';
 
 const routes: Routes = [
   {
@@ -192,9 +196,6 @@ const routes: Routes = [
   component:  GiornataDetailCommandeComponent
 },
 
-
-
-
 // dettagli delle varie visualizzazioni di giornata
 {
   path: 'giornata/ValoriCassa/Edits/:id',
@@ -233,6 +234,7 @@ const routes: Routes = [
   component: CommandaPreviewComponent,
  // canActivate: [RouteGuardService]
 },
+// -------------------------------------------------------  Prenotazioni
 {
   path: 'requestConfirmPrenotazione',
    component: RequestPrenotazioneComponent
@@ -246,6 +248,14 @@ const routes: Routes = [
    component: PrenotazioniComponent,
    canActivate: [RouteGuardService]
 },
+
+{
+  path: 'prenotazione/infor',
+   component: InfoPrenotazioneComponent
+},
+
+// ----------------------------------------------------------------  Gestione Bevance / Cucina
+
 {
   path: 'commanda/gestioneCucina',
   component: GestioneComponent,
@@ -259,6 +269,11 @@ const routes: Routes = [
 {
   path: 'commanda',
   component: CommandeComponent
+},
+// ----------------------------------------------------------------  Tabelle
+{
+  path: 'tabella',
+  component: TabelleComponent
 },
 // ----------------------------------------------------------------  Manifestazione
   {
@@ -289,6 +304,11 @@ const routes: Routes = [
     path: 'manif/bilancio/:id',
     component: ManifestazioneDetailBilancioComponent
   },
+  {
+    path: 'manif/grafico/day/:id',
+    component: ManifestazioneDetailDayGraphComponent
+  },
+
 // ------------------------------------------------------------------  Users
 
 
@@ -400,6 +420,22 @@ const routes: Routes = [
   {
     path: 'persona',
     component: PersoneComponent
+  },
+  {
+    path: 'persona/inqu/:id',
+    component: PersonaDetailComponent
+  },
+  {
+    path: 'persona/edit/:id',
+    component: PersonaDetailComponent
+  },
+  {
+    path: 'persona/edits/:id',
+    component: PersonaDetailComponent
+  },
+  {
+    path: 'persona/new',
+    component: PersonaDetailComponent
   },
  // ---------------------------------------------------------------------- Moduli
   {

@@ -17,51 +17,45 @@
         <li><a href="#">Contact</a></li>
       </ul>
     </li>
+ <!--  ruoloUser:  {{ruoloUser}}  -->
 <!-- funzioni visibili solo da supervisore -->
-    <li><a class="nav-link" *ngIf="isUserLoggedIn " routerLink="profile" >Funzioni</a>
+    <li><a  href="#">Prenotazioni</a>
       <ul>
-        <li><a *ngIf="isUserLoggedIn  && funcEnabled" href="#">Manifestazioni</a>
-          <ul>
-            <li><a *ngIf="isUserLoggedIn"   class="nav-link" href="#" [routerLink]="['/manif/new']">Nuova</a></li>
-            <li><a *ngIf="isUserLoggedIn"   class="nav-link" href="#" [routerLink]="['/manif']">Elenco Manifestazioni</a></li>
-          </ul>
-        </li>
-        <li><a *ngIf="isUserLoggedIn && funcEnabled" href="#">Prodotti</a>
-          <ul>
-            <li><a *ngIf="isUserLoggedIn"   class="nav-link" href="#" [routerLink]="['/manif']">Nuovo</a></li>
-            <li><a *ngIf="isUserLoggedIn"   class="nav-link" href="#" [routerLink]="['/manif']">Elenco Prodotti</a></li>
-          </ul>
-        </li>
-        <li><a *ngIf="isUserLoggedIn && funcEnabled" href="#">Commande</a>
-          <ul>
-            <li><a *ngIf="isUserLoggedIn"   class="nav-link" href="#" (click)="goActivity(ruoloCassa)">Nuovo</a></li>
-            <li><a *ngIf="isUserLoggedIn"   class="nav-link" href="#" [routerLink]="['/commande']">Elenco Commande</a></li>
-          </ul>
-        </li>
-        <li><a *ngIf="isUserLoggedIn && funcEnabled" href="#">Prenotazioni</a>
-          <ul>
-            <li><a   class="nav-link" [routerLink]="['info/infoprenotazione']" href="#">Info</a></li>
-            <!-- se non aperta Sanfra va inviato popup di avviso -->
+        <li><a   class="nav-link"  (click)="showInfoPrenotazionePopup()"  >Info</a></li>  <!-- [routerLink]="['prenotazione/infor']" -->
+        <!-- se non aperta Sanfra va inviato popup di avviso -->
 
-            <li><a  *ngIf="!manifActive"   class="nav-link" [routerLink]="['/notopenSanfra']" href="#">Prenotazione</a></li>
+    <!--    <li><a  *ngIf="!manifActive"   class="nav-link" [routerLink]="['/notopenSanfra']" href="#">Prenotazione</a></li>   --->
 
-            <li><a  *ngIf="manifActive" class="nav-link" [routerLink]="['/reqPrenotazione']" href="#">Prenotazione</a></li>
-            <li><a  *ngIf="manifActive" class="nav-link" href="#"  [routerLink]="['/prenotazioni']">Elenco Prenotazioni</a></li>
-          </ul>
-        </li>
-        <li><a *ngIf="isUserLoggedIn && funcEnabled" href="#">Users</a>
+        <li><a   class="nav-link"  (click)="verifyPresentiGiornate()">Prenotazione</a></li>  <!--  [routerLink]="['/requestConfirmPrenotazione']" -->
+        <li><a *ngIf="isUserLoggedIn && ruoloUser === 0"  class="nav-link" href="#"  [routerLink]="['/prenotazioni']">Elenco Prenotazioni</a></li>
+     <!--   <li><a  *ngIf="manifActive" class="nav-link" href="#"  [routerLink]="['/prenotazioni']">Elenco Prenotazioni</a></li>  -->
+      </ul>
+    </li>
+    <li><a class="nav-link"  href="#"  >Funzioni</a>
+      <ul>
+        <li><a *ngIf="isUserLoggedIn && ruoloUser === -1" [routerLink]="['/manif']">Manifestazioni</a></li>
+        <li><a *ngIf="isUserLoggedIn && ruoloUser === -1" [routerLink]="['/prodotto']">Prodotti</a></li>
+        <li><a *ngIf="isUserLoggedIn && ruoloUser === -1" [routerLink]="['/persona']">Persone</a></li>
+        <li><a *ngIf="isUserLoggedIn && ruoloUser === -1" [routerLink]="['/commanda']">Commande</a></li>
+        <li><a *ngIf="isUserLoggedIn && ruoloUser === -1" [routerLink]="['/prenotazione']">Prenotazioni</a></li>
+        <li><a *ngIf="isUserLoggedIn && ruoloUser === -1" [routerLink]="['/fornitore']">Fornitori</a></li>
+        <li><a *ngIf="isUserLoggedIn && ruoloUser === -1" [routerLink]="['/spesa']">Spese</a></li>
+        <li><a *ngIf="isUserLoggedIn && ruoloUser === -1" [routerLink]="['/users']">Utenti</a></li>
+        <li><a *ngIf="isUserLoggedIn && ruoloUser === -1" href="#">Riservate</a>
           <ul>
-            <li><a *ngIf="isUserLoggedIn"   class="nav-link" href="#" [routerLink]="['/users']">Elenco Users</a></li>
+            <li><a  class="nav-link"  [routerLink]="['/modulis']">Moduli</a></li>
           </ul>
-        </li>
-        <li><a *ngIf="isUserLoggedIn && funcEnabled" href="#">Tabelle</a>
           <ul>
-            <li><a *ngIf="isUserLoggedIn"   class="nav-link" href="#" [routerLink]="['/tabellat']">Elenco tabelle</a></li>
+            <li><a  class="nav-link"  [routerLink]="['/abilitaziones']">Abilitazioni</a></li>
+          </ul>
+          <ul>
+            <li><a  class="nav-link"  [routerLink]="['/tabella']">tabelle</a></li>
           </ul>
         </li>
+
      </ul>
     </li>
-
+<!--
     <li>
       {{isUserLoggedIn}} &nbsp; {{userAnonimus}} &nbsp; {{manifActive}}
       <a *ngIf="!isUserLoggedIn && manifActive || isUserLoggedIn && userAnonimus && manifActive" href="#">Prenotazioni</a>
@@ -71,7 +65,7 @@
         <li><a  *ngIf="manifActive" class="nav-link" [routerLink]="['/reqPrenotazione']" href="#">Prenotazione</a></li>
         <li><a *ngIf="isUserLoggedIn && userAnonimus"  class="nav-link" href="#"  [routerLink]="['/prenotazioni']">Elenco Prenotazioni</a></li>
       </ul>
-    </li>
+    </li>   -->
 
 
 
@@ -119,12 +113,13 @@
     <li class="nav-item text-nowrap">
           <a *ngIf="isUserLoggedIn" class="nav-link titoliwhite"  href="#" (click)=logout($event)>Sign out</a>
     </li>  -->
-    <li hidden *ngIf="isUserLoggedIn" class="nav-item nav-link ">  <!--  -->
-      {{ruoloUser}}
+    <li hidden *ngIf="isUserLoggedIn" class="nav-item nav-link ">  <!--  {{ruoloUser}}  -->
+
     </li>
-    <li   *ngIf="isUserLoggedIn" class="nav-item nav-link ">   <!-- hidden -->
+    <!--
+    <li   *ngIf="isUserLoggedIn" class="nav-item nav-link ">
       {{idDay}}
-    </li>
+    </li>  -->
     <li   *ngIf="isUserLoggedIn" class="nav-item nav-link titoliwhite">   <!-- hidden -->
       {{profilo}}
     </li>
@@ -196,5 +191,55 @@
 </nav>
 
 
+<ng-template #content let-modal>
+
+  <div class="modalMoreno modal-dialog modal-lg">
+
+
+
+
+  <div class="modal-header modal-header-Moreno" >
+    <div class="col-sm-3">
+      <img src="assets/images/logoSanfra.png" width="40" height="40" alt="logo">
+    </div>
+    <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  </div>
+
+  <div class="container  contMoreno">
+  <div class="modal-body">
+
+
+
+
+    <p>Nel menu <strong>Prenotazioni</strong>&nbsp; la voce <strong>Prenotazione</strong>&nbsp;consente di accedere alla pagina di registrazione per una prenotazione al Sanfra.</p>
+      <div class="col-sm-3">
+        <img src="assets/images/infoPre/menuPrenotazione01.jpg" alt="menu01">
+      </div>
+      <p>
+      Conclusa la prenotazione, verrà inviata una email con la richiesta di confermare la prenotazione. Effettuata la conferma, la prenotazione viene resa attiva.
+      Per visualizzare le Prenotazioni inserite o per effettuare una eventuale cancellazione, occorre registrarsi preliminarmente tramite la voce
+      <strong>Registrazioni</strong>     <div class="col-sm-3">
+        <img src="assets/images/infoPre/menuRegistrazione.jpg" alt="menu02">
+      </div>
+      <p>
+      <br>Conclusa la registrazione viene resa fruibile la voce <strong>Elenco Prenotazioni</strong></p> che consente di visualizzare ed eventualmente operare sulle prenotazioni effettuate.
+      <div class="col-sm-3">
+        <img src="assets/images/infoPre/ElencoPrenotazioni.jpg" alt="menu03">
+      </div>
+
+
+  </div>
+  </div>
+  <div class="modal-footer">
+
+  <button  class="btn btn-info mr-2" (click)="modal.close('Save click')" >Chiudi
+    <fa-icon [icon]="faTimes"  fixed="true"></fa-icon>
+  </button>
+  </div>
+</div>
+  </ng-template>
 
 

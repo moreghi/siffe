@@ -307,6 +307,10 @@
     }
   }
 
+
+
+
+
   /* iPad */
   .no-transition {
     transition: none;
@@ -358,6 +362,21 @@
   color: violet;
 }
 
+.modal-header-Moreno {
+  background-color: palegoldenrod;
 
+}
+
+.modalMoreno{
+ /* width: 800px; */
+}
+.modal-body {
+  /* width: 800px; */
+}
+.contMoreno {
+  /* width: 800px; */
+}
+
+.app-modal-window .modal-dialog { width: 1800px; }
 
 /*                  fine  versione 1  */

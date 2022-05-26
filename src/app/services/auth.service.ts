@@ -248,6 +248,11 @@ export class AuthService {
     localStorage.removeItem('user');
     localStorage.removeItem('user_ruolo');
     localStorage.removeItem('username');
+    localStorage.removeItem('level');
+    localStorage.removeItem('idruoloday');
+    localStorage.removeItem('token_type');
+    localStorage.removeItem('expires_in');
+    localStorage.removeItem('idGiornata');
 
     this.userlogout.emit();
     this.isUserLogged = false;
@@ -320,6 +325,21 @@ confresetPassword(email: string, newpassword: string) {
   this.user.password = newpassword;
   return this.http.post(this.APIAUTHURL + "confforgotpassword", { email, newpassword });
 }
+
+
+// da fare in backend
+sendConfirmPrenotazione(email: string, cognome: string, nome: string, dataserata: string, posti: number) {
+  return  this.http.post(this.APIAUTHURL + "sendConfirmPrenotazione", {
+    email,
+    cognome,
+    nome,
+    dataserata,
+    posti
+  });
+}
+
+
+
 
 
 //  versione 1   con subscribe fatta nel service

@@ -3,7 +3,7 @@
 export interface GiornataInterface {
 
   id: number;
-  dtGiornata: Date;
+  dtGiornata: string;
   idManifestazione: number;
   stato: number;
   statoMagazzino: number;

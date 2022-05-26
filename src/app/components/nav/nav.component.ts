@@ -6,15 +6,23 @@ import { faUserPlus, faUserFriends, faUser, faUserCheck } from '@fortawesome/fre
 import { User } from '../../classes/User';
 import { Userlevel } from '../../classes/UserLevel';
 import { Giornata } from '../../classes/Giornata';
+import { Prenotazione } from '../../classes/Prenotazione';
+import { Message } from '../../classes/Message';
+// component
+import { InfoPrenotazioneComponent } from './../../components/prenotaziones/info-prenotazione/info-prenotazione.component';
+import { MessageComponent } from './../../components/popups/message/message.component';
+
 // import { Manifestazione } from '../../classes/Manifestazione';
 // services
 import { AuthService } from './../../services/auth.service';
 import { UserlevelService } from './../../services/userlevel.service';
 import { GiornataService } from './../../services/giornata.service';
+import { MessageService } from './../../services/message.service';
 // import { ManifestazioneService } from './../../services/manifestazione.service';
 // import { Giornata } from './../../classes/Giornata';
 // per gestire il popup con esito operazione
 import { NotifierService } from 'angular-notifier';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -49,7 +57,8 @@ export class NavComponent implements OnInit {
   public giornata: Giornata;
   // public manifestazione: Manifestazione;
   public manifActive = false;
-
+  public prenotazione: Prenotazione;
+  public message: Message;
 
 
   public ruoloUser: number;
@@ -69,13 +78,15 @@ export class NavComponent implements OnInit {
 
   public type = '';
   public Message = '';
-
+  closeResult = '';
 
   constructor(private route: Router,
               private auth: AuthService,
               private userlevelService: UserlevelService,
               private giornataService: GiornataService,
-              private notifier: NotifierService
+              private messageService: MessageService,
+              private notifier: NotifierService,
+              public modal: NgbModal,
              // private manifestazioneService: ManifestazioneService,
              ) {
 
@@ -397,6 +408,116 @@ showNotification( type: string, message: string ): void {
     }
 
   }
+
+
+// ---------------------    info prenotazione  -- versione aperto in nav   ---- fine
+
+
+showInfoPrenotazionePopup() {
+  console.log('showInfoPrenotazione - lancio popup');
+  this.prenotazione = new Prenotazione();
+  this.prenotazione.id = 1;
+
+  const ref = this.modal.open(InfoPrenotazioneComponent , {size:'lg'});
+  ref.componentInstance.selectedUser = this.prenotazione;
+
+  ref.result.then(
+      (yes) => {
+        console.log('Click YES');
+        // quando torno da save su popup faccio elenco per riaggiornare la situazione
+        // non funziona perchè sono su prodotto e non prodotti
+      },
+      (cancel) => {
+        console.log('click Cancel');
+      }
+    );
+
+
+}
+
+// verifico se ci sono giornate per effettuare prenotazioni
+async verifyPresentiGiornate() {
+  console.log('verifyPresentiGiornate --inizio');
+  // -----   non gestita fino a quando non attivo componente ) ;
+
+  let res = await this.giornataService.getGiornateprenotabili().subscribe(
+            response => {
+               if(response['rc'] === 'ok') {
+                 // effettuo la navigazione a form per registrare prenotazione
+                 this.route.navigate(['requestConfirmPrenotazione']);
+               }
+               if(response['rc'] === 'nf') {
+                // apro popup per visualizzare il messaggio di assenza giornate per prenotazione
+                this.updateMessage();
+              }
+     },
+     error => {
+        alert('nav  -- verificaseDayAbilitato - errore: ' + error.message);
+        console.log(error);
+     });
+
+}
+
+
+
+
+
+async updateMessage() {
+
+  const key = 1;
+  this.message = new Message();
+  this.message.tipo = 'I';
+  this.message.title = 'prenotazione Serate';
+  this.message.message01 = 'Non presenti giornate';
+  this.message.message02 = 'prenotazione non possibile';
+  this.message.image = 'Info.png';
+  this.message.id = key;
+
+  let res = await this.messageService.update(this.message).subscribe(
+    response => {
+         if(response['rc'] === 'ok') {
+          // alert('aggiornato messaggio');
+           this.showMessagePopup(this.message);
+          }
+      },
+    error => {
+      alert('nav  -- loadProfiloLogged - errore: ' + error.message);
+      console.log(error);
+    });
+}
+
+showMessagePopup(message: Message) {
+  console.log('showMessagePopup - lancio popup');
+ // this.prenotazione = new Prenotazione();
+ // this.prenotazione.id = 1;
+
+  const ref = this.modal.open(MessageComponent , {size:'lg'});
+  ref.componentInstance.selectedUser = message;
+
+  ref.result.then(
+      (yes) => {
+        console.log('Click YES');
+        // quando torno da save su popup faccio elenco per riaggiornare la situazione
+        // non funziona perchè sono su prodotto e non prodotti
+      },
+      (cancel) => {
+        console.log('click Cancel');
+      }
+    );
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 // ------------------------------------------------------------------------    parti obsolete
 

@@ -20,6 +20,7 @@ import { TtagliaService} from '../../../services/ttaglia.service';
 // per gestire il popup con esito operazione
 import { NotifierService } from 'angular-notifier';
 import { DatePipe } from '@angular/common';
+import { isNull } from '@angular/compiler/src/output/output_ast';
 
 
 @Component({
@@ -30,7 +31,7 @@ import { DatePipe } from '@angular/common';
 export class GiornataDetailComponent implements OnInit {
 
 
-  public title = "Gestione Giornata";
+  public title = "Gestione Giornata -  giornata-detail works!";
 
 // icone
   faPlusSquare = faPlusSquare;
@@ -379,6 +380,8 @@ public functionUserUp = '';
               }
 
   async loadlastDay(id: number) {
+    this.gior = new Giornata();
+    this.neverDay = 'Nessuna data ancora inserita';
     console.log(`loadlastDay - appena entrato`);
     let rc = await this.giornataService.getLastGiornataidbyManif(id).subscribe(
      resp => {
@@ -387,10 +390,11 @@ public functionUserUp = '';
            if(resp['rc'] === 'ok') {
               this.foundLastday = true;
               this.gior = resp['data'];
+
             }
            if(resp['rc'] === 'nf') {
               this.foundLastday = false;
-              this.neverDay = 'Nessuna data ancora inserita';
+
             }
            console.log('fatto lettura last giornata: ' + this.gior.id);
          //  this.type = 'success';
@@ -445,36 +449,46 @@ async loadGiornata(id: number) {
 
 
 
-
-
   async conferma() {
     console.log('conferma - fase: ' + this.fase);
 
 // controllo sulle date
 
+    if(this.foundLastday === true) {
+        console.log('uscita 1');
+        this.date1 = new Date(this.gior.dtGiornata);
+        this.date2 = new Date(this.giornata.dtGiornata);
 
-    this.date1 = new Date(this.gior.dtGiornata);
-    this.date2 = new Date(this.giornata.dtGiornata);
+        console.log('la data1 lastdata :' + this.date1);
 
-    console.log('la data1 lastdata :' + this.date1);
+        console.log('la data2 gior.dtGiornata è:' + this.date2);
 
-    console.log('la data2 gior.dtGiornata è:' + this.date2);
+        if(this.date2 < this.date1) {
+          this.type = 'error';
+          this.Message = 'Selezionare una data maggiore dell ultima data inserita';
+          this.showNotification(this.type, this.Message);
+          return;
+        }
 
-    if(this.date2 < this.date1) {
-      this.type = 'error';
-      this.Message = 'Selezionare una data maggiore dell ultima data inserita';
-      this.showNotification(this.type, this.Message);
-      return;
-    }
+
+
+
+        this.giornata.dtGiornata =  this.datePipe.transform(this.date2,"yyyy-MM-dd");                                      //this.date2;
+  } else {
+    console.log('uscita ------------------------  2' );
+
+  }
+
 
     this.giornata.idManifestazione = this.manif.id;
 
     switch (this.fase)  {
 
         case 'N':
+        console.log('pronto per fare inserimento ' + JSON.stringify(this.giornata));
           let rc = await  this.giornataService.createGiornata(this.giornata).subscribe(
           res => {
-                this.aggiornaDatafineManifestazione();
+                this.aggiornaDatafineManifestazione(this.giornata.dtGiornata);
                 this.loadlastGiornata(this.idManif);
 
                 this.type = 'success';
@@ -496,6 +510,7 @@ async loadGiornata(id: number) {
 
       let rc1 = this.giornataService.updateGiornata(this.giornata).subscribe(
           res => {
+                this.aggiornaDatafineManifestazione(this.giornata.dtGiornata);
                 this.giornata = res['data'];
                 this.type = 'success';
                 this.Message = res['message'];          //'utente aggiornato con successo del cazzo';
@@ -518,7 +533,7 @@ async loadGiornata(id: number) {
 
 
   async loadlastGiornata(id: number) {
-   // console.log(`loadlastGiornata - appena entrato`);
+    console.log(`loadlastGiornata - appena entrato`);
     let rc = await this.giornataService.getLastGiornataidbyManif(id).subscribe(
      resp => {
 
@@ -528,6 +543,7 @@ async loadGiornata(id: number) {
               this.creanewCassawGiornata(this.gior.id);
               this.creanewCassaGiornata(this.gior.id);
             }
+
          },
      error => {
           alert('sono in loadlastGiornata');
@@ -550,19 +566,19 @@ async loadGiornata(id: number) {
       resp => {
 
             if(resp['rc'] === 'ok') {
-               console.log(`creanewCassawGiornata: ----------------------->  ${JSON.stringify(resp['data'])} `);
+         //      console.log(`creanewCassawGiornata: ----------------------->  ${JSON.stringify(resp['data'])} `);
                this.taglie = resp['data'];
                this.prg = id * 100;
                for(let tagl of this.taglie) {
                   if(tagl.id > 0) {
                     this.cassaw = new Cassaw();
-                    console.log(`creanewCassawGiornata: ------fatto istanza -------->  ${JSON.stringify(this.cassaw)} `);
+              //      console.log(`creanewCassawGiornata: ------fatto istanza -------->  ${JSON.stringify(this.cassaw)} `);
                     this.prg = this.prg + 1;
                     this.cassaw.id = this.prg;
                     this.cassaw.idGiornata = id;
                     this.cassaw.idTaglia = tagl.id;
 
-                    console.log(`creanewCassawGiornata: ------- pronto per inserire ---------------->  ${JSON.stringify(this.cassaw)} `);
+              //      console.log(`creanewCassawGiornata: ------- pronto per inserire ---------------->  ${JSON.stringify(this.cassaw)} `);
 
                     this.registranewCassaw(this.cassaw);
                   }
@@ -591,19 +607,19 @@ async loadGiornata(id: number) {
       resp => {
 
             if(resp['rc'] === 'ok') {
-               console.log(`creanewCassaGiornata: ----------------------->  ${JSON.stringify(resp['data'])} `);
+            //   console.log(`creanewCassaGiornata: ----------------------->  ${JSON.stringify(resp['data'])} `);
                this.taglie = resp['data'];
                this.prg = id * 100;
                for(let tagl of this.taglie) {
                   if(tagl.id > 0) {
                     this.cassa = new Cassa();
-                    console.log(`creanewCassaGiornata: ------fatto istanza -------->  ${JSON.stringify(this.cassa)} `);
+              //      console.log(`creanewCassaGiornata: ------fatto istanza -------->  ${JSON.stringify(this.cassa)} `);
                     this.prg = this.prg + 1;
                     this.cassa.id = this.prg;
                     this.cassa.idGiornata = id;
                     this.cassa.idTaglia = tagl.id;
                     this.cassa.key_utenti_operation = +localStorage.getItem('id');
-                    console.log(`creanewCassaGiornata: ------- pronto per inserire ---------------->  ${JSON.stringify(this.cassa)} `);
+                //    console.log(`creanewCassaGiornata: ------- pronto per inserire ---------------->  ${JSON.stringify(this.cassa)} `);
 
                     this.registranewCassa(this.cassa);
                   }
@@ -635,7 +651,7 @@ async loadGiornata(id: number) {
             if(resp['rc'] !== 'ok') {
               this.isVisible = true;
               this.alertSuccess = false;
-              console.log('registranewCassaw - errore:creazione nuova taglia ');
+        //      console.log('registranewCassaw - errore:creazione nuova taglia ');
               this.type = 'error';
               this.Message = 'errore in creazione nuove taglie';
               this.alertSuccess = false;
@@ -662,7 +678,7 @@ async loadGiornata(id: number) {
             if(resp['rc'] !== 'ok') {
               this.isVisible = true;
               this.alertSuccess = false;
-              console.log('registranewCassa - errore:creazione nuova taglia ');
+        //      console.log('registranewCassa - errore:creazione nuova taglia ');
               this.type = 'error';
               this.Message = 'errore in creazione nuove taglie';
               this.alertSuccess = false;
@@ -683,9 +699,29 @@ async loadGiornata(id: number) {
   }
 
 
-async aggiornaDatafineManifestazione() {
-    this.manif.dtFine = this.giornata.dtGiornata;
+async aggiornaDatafineManifestazione(giornata: string) {
+    console.log('--------------------- data inizio ---------------------------------------          aggiornaDate su manif: ' + JSON.stringify(giornata));
+
+
+
+
+    if(this.manif.dtInizio === '01/01/9999') {
+      console.log('trovata data null - caso 2');
+      this.manif.dtInizio = giornata;
+    }
+    this.manif.dtFine = giornata;
     this.manif.key_utenti_operation = +localStorage.getItem('id');
+
+/*   da sistemare
+
+    if(this.manif.dtInizio == null ||  isNull(this.manif.dtInizio)) {
+      this.manif.dtInizio = giornata;
+    }
+    this.manif.dtFine = giornata;
+    this.manif.key_utenti_operation = +localStorage.getItem('id');
+*/
+    console.log('-------------------------------  aggiornadata fine: ' + JSON.stringify(this.manif));
+
     let rc = await this.manifestazioneService.updateManifestazione(this.manif).subscribe(
       resp => {
             console.log(`aggiornaDatafineManifestazione:  ${JSON.stringify(resp['data'])} `);

@@ -6,8 +6,8 @@ export interface ManifestazioneInterface {
   id: number;
   descManif: string;
   anno: number;
-  dtInizio: Date;
-  dtFine: Date;
+  dtInizio: string;
+  dtFine: string;
   buonoPastoCommanda: number;
   impCoperto: number;
   numTavoli: number;

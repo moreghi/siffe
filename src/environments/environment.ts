@@ -3,15 +3,16 @@
 // The list of file replacements can be found in `angular.json`.
 
 // per ambiente di sviluppo su localhost
-/*
+
 export const environment = {
   production: false,
   APIURL: 'http://localhost:3000',
   APIAUTURL: 'http://localhost:3000/api/auth/',
   IMGURL: 'http://localhost:3000/storage/posts/'
 };
-*/
 
+
+/*
 // per ambiente di produzione su Vercel
 export const environment = {
   production: false,
@@ -19,7 +20,7 @@ export const environment = {
   APIAUTURL: 'https://sifbe.herokuapp.com/api/auth/',
   IMGURL: 'https://sifbe.herokuapp.com/storage/posts/'
 };
-
+*/
 
 
 

@@ -49,6 +49,7 @@ import { CtrfuncService } from './services/ctrfunc.service';
 import { GiornataService } from './services/giornata.service';
 import { TtagliaService } from './services/ttaglia.service';
 import { GraphprodService} from './services/graphprod.service';
+import { TstatocassaService } from './services/tstatocassa.service';
 
 // component
 import { SignupConfermeComponent } from './components/security/signup-conferme/signup-conferme.component';
@@ -138,6 +139,17 @@ import { Giornata1Component } from './components/giornatas/giornata1/giornata1.c
 import { Spesa3Component } from './components/speses/spesa3/spesa3.component';
 import { PersoneComponent } from './components/personas/persone/persone.component';
 import { Persona2Component } from './components/personas/persona2/persona2.component';
+import { PersonaDetailComponent } from './components/personas/persona-detail/persona-detail.component';
+import { ManifestazioneDetailDayGraphComponent } from './components/manifestaziones/manifestazione-detail-day-graph/manifestazione-detail-day-graph.component';
+import { InfoPrenotazioneComponent } from './components/prenotaziones/info-prenotazione/info-prenotazione.component';
+import { MessageComponent } from './components/popups/message/message.component';
+import { TabelleComponent } from './components/tabelles/tabelle/tabelle.component';
+import { TabellaComponent } from './components/tabelles/tabella/tabella.component';
+import { TabellaTwDettComponent } from './components/tabelles/tabella-tw-dett/tabella-tw-dett.component';
+import { TabellaTwDettPopComponent } from './components/popups/tabella-tw-dett-pop/tabella-tw-dett-pop.component';
+import { Commanda2Component } from './components/commandas/commanda2/commanda2.component';
+import { Commandariga3Component } from './components/commandarigas/commandariga3/commandariga3.component';
+
 
 
 
@@ -283,6 +295,17 @@ const customNotifierOptions: NotifierOptions = {
     Spesa3Component,
     PersoneComponent,
     Persona2Component,
+    PersonaDetailComponent,
+    ManifestazioneDetailDayGraphComponent,
+    InfoPrenotazioneComponent,
+    MessageComponent,
+    TabelleComponent,
+    TabellaComponent,
+    TabellaTwDettComponent,
+    TabellaTwDettPopComponent,
+    Commanda2Component,
+    Commandariga3Component,
+
 
 
   ],
@@ -304,7 +327,7 @@ const customNotifierOptions: NotifierOptions = {
   ],
   providers: [AuthService, DatePipe, UserService, TruoloService,TokenStorageService,ForgotconfirmedService,ForgotconfirmedtestService,
               ChangepassService,RouteGuardService,TruoloWebService,TstatoutenteService,UploadFilesService,ManifestazioneService,
-              AbilfunctioneService,UserlevelService,CtrfuncService,GiornataService,TtagliaService,GraphprodService],
+              AbilfunctioneService,UserlevelService,CtrfuncService,GiornataService,TtagliaService,GraphprodService, TstatocassaService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -21,7 +21,7 @@ export class UploadFilesService {
 
     console.log('.....................  uploadFileService - upload - file: ' + JSON.stringify(file));
     this.apiUrl = this.baseUrl  + this.rotta + this.rottafunction + '/' + folder;
-
+    console.log('......... url per Upload ............  uploadFileService - upload - url: ' + this.apiUrl);
     formData.append('file', file);
 
     const req = new HttpRequest('POST', this.apiUrl, formData, {

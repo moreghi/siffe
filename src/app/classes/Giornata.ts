@@ -4,7 +4,7 @@ import { GiornataInterface } from '../interfaces/giornata';
 export class Giornata implements GiornataInterface {
 
   id: number;
-  dtGiornata: Date;
+  dtGiornata: string;
   idManifestazione: number;
   stato: number;
   statoMagazzino: number;
@@ -66,7 +66,7 @@ export class Giornata implements GiornataInterface {
   constructor()  {
 
     this.id = 0;
-    this.dtGiornata = new Date();
+    this.dtGiornata = '';
     this.idManifestazione = 0;
     this.stato = 0;
     this.statoMagazzino = 0;

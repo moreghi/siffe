@@ -12,6 +12,7 @@ import { AuthService } from '../services/auth.service'
 export class TtagliaService {
 
   private rotta = '/ttaglia';
+  private rottafunction = '';
 
   private APIURL = environment.APIURL + this.rotta;  // definisco l'url su cui effettuare la lettura sul server
 
@@ -37,30 +38,46 @@ export class TtagliaService {
         });      // ok      // ok
        }
 
-  getbyId(id: number) {
+  getbyid(id: number) {
          return this.http.get(this.APIURL + '/' + id,  {
           headers: this.getAuthHeader()
-        });      // ok);
+        });
        }
 
-
-      delete(taglia: TTaglia) {
-         return this.http.delete(this.APIURL + '/' + taglia.id,  {
+  delete(taglia: TTaglia) {
+        this.rottafunction = 'deletebyid';
+        return this.http.delete(this.APIURL + '/' + this.rottafunction + '/' + taglia.id,  {
           headers: this.getAuthHeader()
-        });      // ok);
+        });
+      }
 
-       }
+  update(taglia: TTaglia) {
+        this.rottafunction = 'updatebyid';
+        return this.http.put(this.APIURL + '/' + this.rottafunction + '/' + taglia.id, taglia,  {
+          headers: this.getAuthHeader()
+        });
+      }
 
-      update(taglia: TTaglia) {
-           return this.http.put(this.APIURL + '/' + taglia.id, taglia,  {
-            headers: this.getAuthHeader()
-          });      // ok);
-         }
+  create(taglia: TTaglia){
+        this.rottafunction = 'create';
+        return this.http.post(this.APIURL + '/' + this.rottafunction, taglia,  {
+          headers: this.getAuthHeader()
+        });
+      }
 
-      create(taglia: TTaglia){
-     return this.http.post(this.APIURL, taglia,  {
-      headers: this.getAuthHeader()
-    });      // ok);
-   }
+  getlastid() {
+        this.rottafunction = 'lastid';
+        return this.http.get(this.APIURL + '/' + this.rottafunction ,  {
+          headers: this.getAuthHeader()
+        });
+      }
+
 
 }
+
+/*
+
+
+
+
+*/

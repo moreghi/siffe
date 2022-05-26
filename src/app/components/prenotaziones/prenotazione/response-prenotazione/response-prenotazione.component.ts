@@ -75,6 +75,9 @@ export class ResponsePrenotazioneComponent implements OnInit {
   public initialDate: any;
   public visibleConferma = true;
 
+  public confermataPrenotazione = false;
+  public emailsend = false;
+
   constructor(private router: Router,
               private route: ActivatedRoute,
               private datePipe: DatePipe,
@@ -92,6 +95,7 @@ export class ResponsePrenotazioneComponent implements OnInit {
               }
 
   ngOnInit(): void {
+    this.confermataPrenotazione = false;
     this.ricpren  = new PrenotazioneConfirm();
     this.token = this.form.token;
     console.log('OnInit - token: ' + this.token);
@@ -168,6 +172,7 @@ export class ResponsePrenotazioneComponent implements OnInit {
    // alert('sono in submit');
     console.log('sono in submit ---------  codpren --  ' + form.value.codpren);
 
+    this.emailsend = false;
     // eseguo controllo sui campi inseriti
     if(form.value.codpren !== this.codpren) {
       this.Message = 'codice di conferma prenotazione non corrisponde  - conferma non consentita';
@@ -234,7 +239,6 @@ export class ResponsePrenotazioneComponent implements OnInit {
       //  console.log('imposto la data di prenotazione: ' + this.prenotazione.datapren + ' data di provenienza: ' + this.ricpren.datapren);
         this.prenotazione.persone = this.ricpren.persone;
         this.prenotazione.telefono = this.ricpren.telefono;
-
         this.confermaPrenotazione(this.prenotazione, this.token);
         },
         error => {
@@ -249,6 +253,7 @@ export class ResponsePrenotazioneComponent implements OnInit {
     this.prenotazioneService.createPrenotazione(prenotazione).subscribe(
       resp => {
           if(resp['rc']  === 'ok') {
+            this.invioemailfinale(prenotazione);
             this.cancellazioneConfermaPrenotazione(token);
             } else {
             this.isVisible = true;
@@ -263,6 +268,26 @@ export class ResponsePrenotazioneComponent implements OnInit {
       }
     );
   }
+
+  // moreno
+  invioemailfinale(pren: Prenotazione)  {
+
+    this.prenotazioneService.sendemailPrenotazioneConfermataMoreno(pren).subscribe(
+      resp => {
+          if(resp['rc']  === 'ok') {
+            this.emailsend = true;
+            this.confermataPrenotazione = true;
+           }
+      },
+      error => {
+        console.log('error ininvioemailfinale Prenotazione: ' + error.message);
+      });
+  }
+
+
+
+
+
 
 
   cancellazioneConfermaPrenotazione(token: string) {
@@ -280,6 +305,7 @@ export class ResponsePrenotazioneComponent implements OnInit {
               this.Message = 'Prenotazione confermata correttamente';
               this.showNotification(this.type, this.Message);
             }
+
            } else {
             this.isVisible = true;
             this.alertSuccess = false;

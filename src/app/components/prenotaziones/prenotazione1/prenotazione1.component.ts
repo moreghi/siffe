@@ -49,7 +49,6 @@ public deletedPrenot = 'Dpren';
 
 
 
-
 // parametri per interfaccia a ghost
 // Parametri obbligatori:
 // - routeApp

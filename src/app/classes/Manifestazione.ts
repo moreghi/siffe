@@ -6,8 +6,8 @@ export class Manifestazione implements ManifestazioneInterface {
   id: number;
   descManif: string;
   anno: number;
-  dtInizio: Date;
-  dtFine: Date;
+  dtInizio: string;
+  dtFine: string;
   buonoPastoCommanda: number;
   impCoperto: number;
   numTavoli: number;
@@ -29,8 +29,8 @@ export class Manifestazione implements ManifestazioneInterface {
     this.id = 0;
     this.descManif = '';
     this.anno = 0;
-    this.dtInizio = new Date();
-    this.dtFine = new Date();
+    this.dtInizio = '';
+    this.dtFine = '';
     this.buonoPastoCommanda = 0;
     this.impCoperto = 0;
     this.numTavoli = 0;
