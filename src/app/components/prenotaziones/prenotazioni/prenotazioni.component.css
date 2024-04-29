@@ -1,0 +1,7 @@
+.title {
+  border-radius: 15px;
+  margin: 0 auto;
+  background-color: yellow;
+  border: 2px solid red;
+  box-shadow: 3px 4px 5px 4px #777777;
+}

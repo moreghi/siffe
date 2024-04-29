@@ -1,0 +1,320 @@
+
+
+<div class="container borde">
+
+  <div class="header_Inqu" *ngIf="functionInqu">
+    <caption class="title_Inqu  col-md-12">{{title}}</caption>
+  </div>
+
+
+  <div class="header_Edit title_Edit" *ngIf="functionUser  ===  searchEdits   ||  functionUser  ===  searchEdit">
+
+      <strong>{{title}}</strong>
+
+  </div>
+  <!--
+  <div class="header_Edit" *ngIf="functionEdit || functionEdits">
+    functionEdit: {{functionEdit}}&nbsp;&nbsp;functionEdits: {{functionEdits}}
+    <caption class="title_Edit  col-md-12">{{title}}</caption>
+  </div>  -->
+
+
+  <div class="header_New" *ngIf="functionNew">
+    <caption class="title_New  col-md-12 ">{{title}}</caption>
+  </div>
+
+
+<br>
+
+
+  <div >
+    <div class="col-md-auto">
+      <form #fm ="ngForm"  method="POST">
+        <input hidden #id="ngModel"  [(ngModel)]="persona.id" class="form-control" name="id" id="id">
+        <input hidden #key_utenti_operation="ngModel"  [(ngModel)]="persona.key_utenti_operation" class="form-control" name="key_utenti_operation" id="key_utenti_operation">
+
+        <div class="form-row">
+          <div class="col-md-12 offset-6">
+            <img src="http://localhost:3000/upload/files/personas/{{persona.photo}}"  alt="selezionare foto" class="img-circle rounded-circle border p-1 centro" width="150px" height="150px">  <!-- assets/images/users/{{user.photo}} -->
+          </div>
+    </div>
+    <br>
+
+    <!--  per upload files -->
+    <div class="row">
+      <div class="col-8">
+        <label class="btn btn-default p-0">
+          <input type="file" (change)="selectFile($event)" />
+        </label>
+      </div>
+
+      <div class="col-4">
+        <button class="btn btn-success btn-sm" [disabled]="!selectedFiles" (click)="upload()">
+          Upload
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="currentFile" class="progress my-3">
+      <div
+        class="progress-bar progress-bar-info progress-bar-striped"
+        role="progressbar"
+        attr.aria-valuenow="{{ progress }}"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        [ngStyle]="{ width: progress + '%' }"
+      >
+        {{ progress }}%
+      </div>
+    </div>
+
+    <div *ngIf="messageupload" class="alert alert-secondary" role="alert">{{ messageupload }}</div>
+<!--    lista dei files  -- non utilizzata in questa specifica situazione
+    <div class="card mt-3">
+      <div class="card-header">List of Files</div>
+      <ul
+        class="list-group list-group-flush"
+        *ngFor="let file of fileInfos | async"
+      >
+        <li class="list-group-item">
+          <a href="{{ file.url }}">{{ file.name }}</a>
+        </li>
+      </ul>
+    </div>    -->
+
+  <!--  per upload files ---------------------    fine  -->
+      <br>
+    <!-- Cognome  -->
+         <div class="form-row">
+          <div class="mb-3 row margini">
+            <label for="cognome" class="col-sm-2 col-form-label">Cognome:</label>
+            <div class="col-sm-5">
+            <input type="text" #cognome="ngModel"  [(ngModel)]="persona.cognome" class="form-control" name="cognome" id="cognome" required minlength="4" maxlength="50" pattern="[0-9a-zA-Z\s]*" placeholder="Inserire Cognome">
+              <div *ngIf="cognome.invalid && (cognome.dirty || cognome.touched)" class="alert-danger">
+                <div *ngIf="cognome.errors.required">
+                    <span>il Cognome è obbligatorio</span>
+                </div>
+                <div *ngIf="cognome.errors.minlength">
+                   <span>il Cognome deve essere di almeno 4 caratteri</span>
+                </div>
+                <div *ngIf="cognome.errors.maxlength">
+                    <span>li Cognome non può essere più lungo di 50 caratteri</span>
+                 </div>
+              </div>
+            </div>
+          </div>
+         </div>
+         <!-- Nome  -->
+         <div class="row">
+          <div class="mb-3 row margini">
+            <label for="nome" class="col-sm-2 col-form-label">Nome:</label>
+            <div class="col-sm-5">
+            <input type="text" #nome="ngModel"  [(ngModel)]="persona.nome" class="form-control" name="nome" id="nome" required minlength="4" maxlength="50" pattern="[0-9a-zA-Z\s]*" placeholder="Inserire Nome">
+              <div *ngIf="nome.invalid && (nome.dirty || nome.touched)" class="alert-danger">
+                <div *ngIf="nome.errors.required">
+                    <span>il Nome è obbligatorio</span>
+                </div>
+                <div *ngIf="nome.errors.minlength">
+                   <span>il Nome deve essere di almeno 4 caratteri</span>
+                </div>
+                <div *ngIf="nome.errors.maxlength">
+                    <span>li Nome non può essere più lungo di 50 caratteri</span>
+                 </div>
+              </div>
+            </div>
+          </div>
+         </div>
+         <!-- email  -->
+
+         <div class="form-group row">
+          <label for="email" class="col-sm-2 col-form-label">Email</label>
+          <div class="col-sm-10">
+            <input type="email" class="form-control" id="email" name="email"  [(ngModel)]="persona.email" placeholder="Email"  required email #email="ngModel" ngModel pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
+            <br>
+            <div *ngIf="email.dirty && email.touched && email.invalid" class="alert alert-danger">
+              <!-- {{ demessa.errors | json }}  per editare gli errori e poi impostare il validatore corretto -->
+            <!--  validatore lato client -->
+                  <div  *ngIf="email.errors.required">    <!-- *ngIf="demessa.invalid"-->
+                    il campo email è obbligatorio
+                  </div>
+                  <div *ngIf="email.errors.pattern">
+                        inserire il formalismo corretto
+                  </div>
+            </div>
+          </div>
+
+        </div>
+        <br>
+        <!-- Titolo -->
+
+
+        <div class="row">
+          <div class="col-md-12 ">
+            <div class="form-group row">
+              <div class="col-md-3 " >
+                <div class="dropdown">
+                  <select class="btn btn-primary dropdown-toggle borde" type="button" data-toggle="dropdown" [(ngModel)]="selectedTitolo" ngModel name="titolo" id="titolo" class="form-select" required (change)="onSelectedTitolo($event.target.value)" aria-label="Default select example">
+                    <option selected value="999"  >Seleziona il titolo</option>
+                    <option *ngFor="let titolo of titoli" [value]="titolo.id"  class="form-control"  >{{titolo.d_titolo}}</option>
+                  </select>
+                </div>
+              </div>
+              &nbsp;
+              <div class="col-md-3 " >
+                <div class="dropdown">
+                  <select class="btn btn-primary dropdown-toggle borde" type="button" data-toggle="dropdown" [(ngModel)]="selectedRuolo" ngModel name="ruolo" id="ruolo" class="form-select" required (change)="onSelectedRuolo($event.target.value)" aria-label="Default select example">
+                    <option selected value="999"  >Seleziona il ruolo</option>
+                    <option *ngFor="let ruolo of ruoli" [value]="ruolo.id"  class="form-control"  >{{ruolo.d_ruolo_day}}</option>
+                  </select>
+                </div>
+              </div>
+              &nbsp;
+              <div class="col-md-3"  >
+                <div class="dropdown">
+                  <select class="btn btn-primary dropdown-toggle borde" type="button" data-toggle="dropdown" [(ngModel)]="selectedStato" ngModel name="stato" id="stato" class="form-select" required (change)="onSelectedStato($event.target.value)" aria-label="Default select example">
+                    <option selected value="999"  >Seleziona lo Stato</option>
+                    <option *ngFor="let stato of stati" [value]="stato.id"  class="form-control"  >{{stato.d_stato_persona}}</option>
+                  </select>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+        <br>
+        <!-- Stato-->
+        <div class="row">
+
+        </div>
+        <br>
+        <!-- Ruolo Day -->
+        <div class="row">
+
+        </div>
+
+
+
+        <!-- radio button per selezione stampa  radio-inline -->
+        <div class="row">
+          <div class="form-group col-md-5">
+            Impostare se in Servizio &nbsp;&nbsp;
+
+            <label class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="S" (change)="changeServizio($event)" >
+              <label class="form-check-label" for="inlineRadio1">Si</label>
+            </label>
+            <label class="form-check form-check-inline">
+                 <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="N" (change)="changeServizio($event)" >
+                <label class="form-check-label" for="inlineRadio2">No</label>
+            </label>
+          </div>
+          <div class="form-group col-md-3">
+            <input disabled  [(ngModel)]="statoServizio" class="form-control" name="statoServizio" id="statoServizio" [style.color]="persona.inServizio == 'N' ? 'red' : 'green'">
+          </div>
+        </div>
+
+      <br>
+  <!-- Note  -->
+       <div class="input-group">
+    <div for="note" class="input-group-prepend">
+      <span class="input-group-text">Note</span>
+    </div>&nbsp;&nbsp;
+    <textarea  aria-label="With textarea"  #note="ngModel"  [(ngModel)]="persona.noteUtente" class="form-control" name="note" id="note"  placeholder="Inserire eventuali note"></textarea>
+       </div>
+<!-- fine  -->
+  <!-- Bottoni funzionali -->
+      <!--      N = {{functionNew}}   E = {{functionEdit}}   S = {{functionEdits}}  I = {{functionInqu}}  -->
+
+
+       <br>
+       <div class="footer" >
+            <div class="row col-sm-10 offset-2">
+              <div class="col-sm-3" *ngIf="functionNew || functionEdit || functionEdits ">
+                <button [disabled]="fm.invalid " class="btn btn-success btn-md " (click)="conferma()">Conferma
+                  <fa-icon [icon]="faSave"  fixed="true"></fa-icon>
+                </button>
+              </div>
+              <div class="col-sm-3" *ngIf="functionNew || functionEdit || functionEdits ">
+                <button [disabled]="fm.invalid " class="btn btn-primary btn-md " (click)="reset()">Reset
+                  <fa-icon [icon]="faTimes"  fixed="true"></fa-icon>
+                </button>
+              </div>
+              <div class="col-sm-3"  *ngIf="functionEdits ">
+                <button [disabled]="fm.invalid " class="btn btn-danger btn-md "  (click)="open(content)"> Cancella
+                  <fa-icon [icon]="faTrash"  fixed="true"></fa-icon>
+                </button>
+              </div>
+              <div class="col-sm-3" >
+                <button  class="btn btn-info btn-md "  (click)="goback()"> Ritorna
+                  <fa-icon [icon]="faReply"  fixed="true"></fa-icon>
+                </button>
+              </div>
+            </div>
+       </div>
+       <br>
+  <!--   messaggio con esito operazione -->
+
+       <div *ngIf="isVisible  && !alertSuccess" class="alert alert-danger" role="alert">
+    <!--     <h4 class="alert-heading">Errore in Registrazione User</h4>   -->
+         <p>{{Message}}</p>
+         <hr>
+         <p class="mb-0">{{Message1err}}</p>
+       </div>
+       <div *ngIf="isVisible  && alertSuccess" class="alert alert-success" role="alert">
+  <!--       <h4 class="alert-heading">Registrazione User</h4>   -->
+         <p>{{Message}}</p>
+         <hr>
+         <p class="mb-0"></p>
+       </div>
+
+
+
+
+
+
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header modal-header-color">
+    <h4 class="modal-title" id="modal-basic-title">Conferma Cancellazione</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <p>confermi la cancellazione del collaboratore &nbsp;&nbsp;</p>
+      <p></p>
+      <p><strong>{{persona.cognome}}&nbsp;&nbsp;{{persona.nome}}</strong>&nbsp;?</p>
+      <!--   esempio di calendario che funziona benissimo
+      <div class="form-group">
+        <label for="dateOfBirth">Date of birth</label>
+        <div class="input-group">
+          <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
+          </div>
+        </div>
+      </div>
+      -->
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Cancel click')">Cancel</button>
+
+    <button type="button" class="btn btn-danger btn-md " (click)="modal.close('Delete click')"> Cancella
+      <fa-icon [icon]="faTrash"  fixed="true"></fa-icon>
+    </button>
+  </div>
+</ng-template>
+
+

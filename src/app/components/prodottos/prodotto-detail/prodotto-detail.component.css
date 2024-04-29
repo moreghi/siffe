@@ -1,0 +1,18 @@
+.borde {
+  border: 3px solid red;
+}
+
+.borde1 {
+  border: 3px solid green;
+}
+
+.borde2 {
+  border: 3px solid orange;
+}
+
+.title_New {
+  text-align: center;
+  vertical-align: middle;
+  font-size: 10px;
+  font-weight: bold;
+}

@@ -1,0 +1,11 @@
+.confermata {
+  color: green;
+  font-weight: bold;
+  text-align: center;
+}
+
+.daconfermare {
+  color: red;
+  font-weight: bold;
+  text-align: center;
+}
